@@ -1,533 +1,617 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>SKelite Talent Partners</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:#fff;color:#1a2e25;overflow-x:hidden;}
-:root{
-  --teal:#1D9E75;--teal-dark:#0f6e56;--teal-deep:#085041;--teal-deeper:#04342C;
-  --teal-light:#9FE1CB;--teal-pale:#e1f5ee;--teal-mid:#5DCAA5;--teal-ghost:#f0fbf7;
-  --yellow:#F5C518;--yellow-light:#FFFBEA;--yellow-mid:#FDE68A;--yellow-dark:#D4A017;
-  --gray:#6b7280;--dark:#0a1a14;--ink:#1a2e25;
-}
-.btn-yellow{background:var(--yellow);color:var(--teal-deep);border:none;border-radius:100px;padding:14px 32px;font-size:15px;font-weight:800;cursor:pointer;transition:all .22s;display:inline-flex;align-items:center;gap:8px;text-decoration:none;}
-.btn-yellow:hover{background:var(--yellow-dark);transform:translateY(-2px);box-shadow:0 10px 32px rgba(245,197,24,.4);}
-.btn-teal{background:linear-gradient(135deg,var(--teal),var(--teal-dark));color:#fff;border:none;border-radius:100px;padding:14px 32px;font-size:15px;font-weight:700;cursor:pointer;transition:all .22s;display:inline-flex;align-items:center;gap:8px;text-decoration:none;}
-.btn-teal:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(29,158,117,.4);}
-.btn-ghost{background:transparent;color:var(--teal);border:2px solid var(--teal);border-radius:100px;padding:12px 28px;font-size:15px;font-weight:700;cursor:pointer;transition:all .22s;text-decoration:none;display:inline-flex;align-items:center;}
-.btn-ghost:hover{background:var(--teal-pale);transform:translateY(-2px);}
-.btn-white{background:#fff;color:var(--teal-deep);border:none;border-radius:100px;padding:13px 28px;font-size:15px;font-weight:800;cursor:pointer;transition:all .22s;text-decoration:none;display:inline-flex;align-items:center;}
-.btn-white:hover{background:var(--yellow);transform:translateY(-2px);}
+import { useState, useEffect, useRef } from "react";
+
+const C = {
+  teal:"#1D9E75",tealDark:"#0f6e56",tealDeep:"#085041",tealDeeper:"#04342C",
+  tealLight:"#9FE1CB",tealPale:"#e1f5ee",tealMid:"#5DCAA5",tealGhost:"#f0fbf7",
+  yellow:"#F5C518",yellowLight:"#FFFBEA",yellowMid:"#FDE68A",yellowDark:"#D4A017",
+  white:"#ffffff",offWhite:"#f8fdfb",gray:"#6b7280",dark:"#0a1a14",ink:"#1a2e25"
+};
+
+const G = {
+  hero:`linear-gradient(155deg,${C.tealGhost} 0%,${C.tealPale} 50%,#d1f5e8 100%)`,
+  teal:`linear-gradient(135deg,${C.teal},${C.tealDark})`,
+  deep:`linear-gradient(160deg,${C.tealDeeper} 0%,${C.dark} 100%)`,
+  yellow:`linear-gradient(135deg,${C.yellow},${C.yellowDark})`,
+  card:`linear-gradient(145deg,${C.tealDark},${C.teal} 80%)`,
+};
+
+const css=`
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}html{scroll-behavior:smooth;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#fff;color:${C.ink};overflow-x:hidden;}
+.btn-yellow{background:${C.yellow};color:${C.tealDeep};border:none;border-radius:100px;padding:15px 34px;font-size:15px;font-weight:800;cursor:pointer;transition:all .22s;letter-spacing:-.2px;display:inline-flex;align-items:center;gap:8px;}
+.btn-yellow:hover{background:${C.yellowDark};transform:translateY(-2px);box-shadow:0 10px 32px ${C.yellow}55;}
+.btn-teal{background:${G.teal};color:#fff;border:none;border-radius:100px;padding:15px 34px;font-size:15px;font-weight:700;cursor:pointer;transition:all .22s;display:inline-flex;align-items:center;gap:8px;}
+.btn-teal:hover{transform:translateY(-2px);box-shadow:0 10px 32px ${C.teal}44;}
+.btn-ghost{background:transparent;color:${C.teal};border:2px solid ${C.teal};border-radius:100px;padding:13px 28px;font-size:15px;font-weight:700;cursor:pointer;transition:all .22s;}
+.btn-ghost:hover{background:${C.tealPale};transform:translateY(-2px);}
+.btn-white{background:#fff;color:${C.tealDeep};border:none;border-radius:100px;padding:14px 30px;font-size:15px;font-weight:800;cursor:pointer;transition:all .22s;}
+.btn-white:hover{background:${C.yellow};transform:translateY(-2px);}
 .chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:6px 16px;border-radius:100px;letter-spacing:.4px;text-transform:uppercase;}
-input,textarea{width:100%;padding:13px 18px;border:1.5px solid var(--teal-light);border-radius:14px;font-size:14px;font-family:inherit;outline:none;transition:all .2s;background:#fff;}
-input:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(29,158,117,.12);}
+input,textarea{width:100%;padding:13px 18px;border:1.5px solid ${C.tealLight};border-radius:14px;font-size:14px;font-family:inherit;outline:none;transition:border .2s,box-shadow .2s;background:#fff;}
+input:focus,textarea:focus{border-color:${C.teal};box-shadow:0 0 0 3px ${C.teal}18;}
 textarea{resize:vertical;min-height:84px;}
-nav{position:sticky;top:0;z-index:200;transition:all .3s;padding:0 5vw;}
-nav.scrolled{background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--teal-pale);}
-.nav-inner{max-width:1160px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:70px;}
-.logo-mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--teal),var(--teal-dark));display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(29,158,117,.35);}
-.nav-links a{font-size:14px;color:var(--ink);font-weight:500;text-decoration:none;opacity:.65;transition:opacity .18s;margin-left:28px;}
-.nav-links a:hover{opacity:1;}
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
 @keyframes drift{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-8px) rotate(3deg);}}
 @keyframes marquee{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
 @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+@keyframes shimmer{0%{background-position:-200% 0;}100%{background-position:200% 0;}}
 @keyframes scaleIn{from{opacity:0;transform:scale(.92);}to{opacity:1;transform:scale(1);}}
+.fade-up{animation:fadeUp .65s ease forwards;}
 .float{animation:float 5s ease-in-out infinite;}
 .drift{animation:drift 6s ease-in-out infinite;}
 .card-hover{transition:transform .22s,box-shadow .22s;}
 .card-hover:hover{transform:translateY(-5px);box-shadow:0 20px 52px rgba(0,0,0,.09);}
-.blob{position:absolute;border-radius:62% 38% 70% 30% / 45% 65% 35% 55%;pointer-events:none;z-index:0;animation:float 5s ease-in-out infinite;}
-section{position:relative;overflow:hidden;}
-.inner{max-width:1160px;margin:0 auto;padding:0 5vw;position:relative;z-index:1;}
-.modal-overlay{position:fixed;inset:0;background:rgba(4,52,44,.65);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);}
-.modal-box{background:#fff;border-radius:28px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;position:relative;animation:scaleIn .3s ease;}
-.prog-bar{height:4px;border-radius:4px;transition:background .3s;}
-</style>
-</head>
-<body>
+`;
 
-<nav id="navbar">
-  <div class="nav-inner">
-    <a href="#" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-      <div class="logo-mark"><span style="color:#fff;font-weight:800;font-size:17px;">SK</span></div>
-      <div>
-        <div style="font-weight:800;font-size:16px;color:var(--teal-deep);letter-spacing:-.4px;line-height:1.1;">SKelite</div>
-        <div style="font-size:9px;color:var(--gray);letter-spacing:1.2px;text-transform:uppercase;">Talent Partners</div>
-      </div>
-    </a>
-    <div class="nav-links" style="display:flex;align-items:center;">
-      <a href="#services">Services</a>
-      <a href="#process">Process</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#contact">Contact</a>
-      <a href="tel:+918103108993" class="btn-teal" style="margin-left:24px;padding:10px 22px;font-size:14px;">Book a Call</a>
-    </div>
-  </div>
-</nav>
+function Dot({color=C.yellow}){return <span style={{width:7,height:7,borderRadius:"50%",background:color,display:"inline-block"}}/>;}
 
-<!-- HERO -->
-<section style="background:linear-gradient(155deg,var(--teal-ghost) 0%,var(--teal-pale) 50%,#d1f5e8 100%);padding:88px 5vw 0;">
-  <div class="blob" style="left:-6%;top:5%;width:480px;height:480px;background:var(--teal-mid);opacity:.13;animation-delay:0s;"></div>
-  <div class="blob" style="left:68%;top:-20%;width:540px;height:540px;background:var(--yellow);opacity:.09;animation-delay:1.5s;"></div>
-  <div class="blob" style="left:82%;top:55%;width:320px;height:320px;background:var(--teal-mid);opacity:.11;animation-delay:3s;"></div>
-  <div class="inner">
-    <div style="display:flex;align-items:center;gap:72px;flex-wrap:wrap;padding-bottom:88px;">
-      <div style="flex:1 1 480px;">
-        <div class="chip" style="background:rgba(245,197,24,.18);color:var(--yellow-dark);margin-bottom:28px;">
-          <span style="width:7px;height:7px;border-radius:50%;background:var(--yellow-dark);display:inline-block;"></span>
-          Hiring That Actually Works
-        </div>
-        <h1 style="font-size:56px;font-weight:800;line-height:1.06;color:var(--teal-deep);margin-bottom:26px;letter-spacing:-2px;">
-          We Don't Just<br/>
-          <span style="background:linear-gradient(90deg,var(--teal),var(--teal-mid));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Fill Roles.</span><br/>
-          We Build Teams.
-        </h1>
-        <p style="font-size:18px;color:var(--gray);line-height:1.75;margin-bottom:38px;max-width:520px;">
-          SKelite is India's founder-led talent partner — built for companies who refuse to settle. Precision sourcing, human judgment, and a model that flexes to <em>your</em> hiring reality.
-        </p>
-        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:52px;">
-          <button class="btn-yellow" onclick="openForm()">Get Free Consultation →</button>
-          <a href="#process" class="btn-ghost">See Our Process</a>
-        </div>
-        <div style="display:flex;flex-wrap:wrap;padding-top:28px;border-top:1px solid var(--teal-light);">
-          <div style="flex:1 1 120px;padding-right:28px;border-right:1px solid var(--teal-light);">
-            <div style="font-size:26px;font-weight:800;color:var(--teal);letter-spacing:-1px;">6-month</div>
-            <div style="font-size:12px;color:var(--gray);margin-top:3px;">Replacement Guarantee*</div>
+function Blob({x,y,w,h,color,op=.13,delay=0}){
+  return(
+    <div style={{position:"absolute",left:x,top:y,width:w,height:h||w,
+      borderRadius:"62% 38% 70% 30% / 45% 65% 35% 55%",
+      background:color,opacity:op,pointerEvents:"none",zIndex:0,
+      animation:`float ${5+delay}s ease-in-out infinite`,animationDelay:`${delay}s`}}/>
+  );
+}
+
+function Nav({onCTA}){
+  const [s,setS]=useState(false);
+  useEffect(()=>{
+    const fn=()=>setS(window.scrollY>50);
+    window.addEventListener("scroll",fn);return()=>window.removeEventListener("scroll",fn);
+  },[]);
+  return(
+    <nav style={{position:"sticky",top:0,zIndex:300,
+      background:s?"rgba(255,255,255,.96)":"transparent",
+      backdropFilter:s?"blur(14px)":"none",
+      borderBottom:s?`1px solid ${C.tealPale}`:"none",
+      transition:"all .3s",padding:"0 5vw"}}>
+      <div style={{maxWidth:1160,margin:"0 auto",display:"flex",alignItems:"center",justifyContent:"space-between",height:70}}>
+        <a href="#" style={{display:"flex",alignItems:"center",gap:10,textDecoration:"none"}}>
+          <div style={{width:42,height:42,borderRadius:13,background:G.teal,display:"flex",alignItems:"center",justifyContent:"center",boxShadow:`0 4px 16px ${C.teal}44`}}>
+            <span style={{color:"#fff",fontWeight:800,fontSize:17,letterSpacing:-.5}}>SK</span>
           </div>
-          <div style="flex:1 1 120px;padding:0 28px;border-right:1px solid var(--teal-light);">
-            <div style="font-size:26px;font-weight:800;color:var(--teal);letter-spacing:-1px;">5-step</div>
-            <div style="font-size:12px;color:var(--gray);margin-top:3px;">Proven Hiring Flow</div>
+          <div>
+            <div style={{fontWeight:800,fontSize:16,color:C.tealDeep,letterSpacing:-.4,lineHeight:1.1}}>SKelite</div>
+            <div style={{fontSize:9,color:C.gray,letterSpacing:1.2,textTransform:"uppercase"}}>Talent Partners</div>
           </div>
-          <div style="flex:1 1 120px;padding-left:28px;">
-            <div style="font-size:26px;font-weight:800;color:var(--teal);letter-spacing:-1px;">Fully</div>
-            <div style="font-size:12px;color:var(--gray);margin-top:3px;">Flexible Pricing</div>
-          </div>
+        </a>
+        <div style={{display:"flex",gap:28,alignItems:"center"}}>
+          {["Services","Process","Pricing","Contact"].map(l=>(
+            <a key={l} href={`#${l.toLowerCase()}`} style={{fontSize:14,color:C.ink,fontWeight:500,textDecoration:"none",opacity:.65,transition:"opacity .18s"}}
+              onMouseEnter={e=>e.target.style.opacity=1}onMouseLeave={e=>e.target.style.opacity=.65}>{l}</a>
+          ))}
+          <button className="btn-teal" style={{padding:"10px 22px",fontSize:14}} onClick={onCTA}>Book a Call</button>
         </div>
       </div>
-      <div style="flex:1 1 340px;display:flex;justify-content:center;">
-        <div style="position:relative;width:370px;">
-          <div class="float" style="background:linear-gradient(145deg,var(--teal-dark),var(--teal));border-radius:28px;padding:34px;box-shadow:0 28px 72px rgba(29,158,117,.35);">
-            <div style="font-size:11px;font-weight:800;letter-spacing:1.2px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:22px;">Elite Minds, Exceptional Matches!</div>
-            <div style="display:flex;gap:14px;margin-bottom:20px;align-items:flex-start;">
-              <div style="width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">🚀</div>
-              <div><div style="font-size:14px;font-weight:700;color:#fff;">Startups</div><div style="font-size:12px;color:rgba(255,255,255,.58);margin-top:2px;">Strategic hiring for nimble, fast-moving teams</div></div>
+    </nav>
+  );
+}
+
+function Hero({onForm}){
+  return(
+    <section style={{position:"relative",overflow:"hidden",background:G.hero,paddingTop:88,paddingBottom:110}}>
+      <Blob x="-6%" y="5%" w={480} color={C.tealMid} op={.13} delay={0}/>
+      <Blob x="68%" y="-20%" w={540} color={C.yellow} op={.09} delay={1.5}/>
+      <Blob x="82%" y="55%" w={320} color={C.tealMid} op={.11} delay={3}/>
+      <Blob x="30%" y="70%" w={260} color={C.yellow} op={.07} delay={2}/>
+
+      <div style={{maxWidth:1160,margin:"0 auto",padding:"0 5vw",position:"relative",zIndex:1}}>
+        <div style={{display:"flex",alignItems:"center",gap:72,flexWrap:"wrap"}}>
+
+          <div style={{flex:"1 1 500px"}}>
+            <div className="chip" style={{background:`rgba(245,197,24,.18)`,color:C.yellowDark,marginBottom:28}}>
+              <Dot/> Hiring That Actually Works
             </div>
-            <div style="display:flex;gap:14px;margin-bottom:20px;align-items:flex-start;">
-              <div style="width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">📈</div>
-              <div><div style="font-size:14px;font-weight:700;color:#fff;">Scaling SMEs</div><div style="font-size:12px;color:rgba(255,255,255,.58);margin-top:2px;">Growth-driven talent solutions that don't slow you down</div></div>
+            <h1 style={{fontSize:58,fontWeight:800,lineHeight:1.06,color:C.tealDeep,marginBottom:26,letterSpacing:-2}}>
+              We Don't Just<br/>
+              <span style={{background:`linear-gradient(90deg,${C.teal},${C.tealMid})`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>Fill Roles.</span><br/>
+              <span style={{position:"relative",display:"inline-block"}}>
+                We Build Teams.
+                <svg style={{position:"absolute",bottom:-8,left:0,width:"100%"}} height="10" viewBox="0 0 400 10">
+                  <path d="M0 8 Q100 0 200 8 Q300 16 400 8" stroke={C.yellow} strokeWidth="4" fill="none" strokeLinecap="round"/>
+                </svg>
+              </span>
+            </h1>
+            <p style={{fontSize:18,color:C.gray,lineHeight:1.75,marginBottom:38,maxWidth:520}}>
+              SKelite is India's founder-led talent partner — built for companies who refuse to settle. We combine precision sourcing, human judgment, and a model that flexes to <em>your</em> hiring reality.
+            </p>
+            <div style={{display:"flex",gap:12,flexWrap:"wrap",marginBottom:52}}>
+              <button className="btn-yellow" onClick={onForm}>Get Free Consultation <span>→</span></button>
+              <button className="btn-ghost" onClick={()=>document.getElementById("process")?.scrollIntoView({behavior:"smooth"})}>See Our Process</button>
             </div>
-            <div style="display:flex;gap:14px;margin-bottom:20px;align-items:flex-start;">
-              <div style="width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">🏢</div>
-              <div><div style="font-size:14px;font-weight:700;color:#fff;">Enterprises</div><div style="font-size:12px;color:rgba(255,255,255,.58);margin-top:2px;">Embedded, multi-person talent teams at scale</div></div>
+            <div style={{display:"flex",gap:0,flexWrap:"wrap",paddingTop:28,borderTop:`1px solid ${C.tealLight}`}}>
+              {[["Replacement","Guarantee*"],["5-step","Proven Hiring Flow"],["Fully","Flexible Pricing"]].map(([n,l],i)=>(
+                <div key={n} style={{flex:"1 1 120px",paddingRight:28,borderRight:i<2?`1px solid ${C.tealLight}`:"none",paddingLeft:i>0?28:0}}>
+                  <div style={{fontSize:26,fontWeight:800,color:C.teal,letterSpacing:-1}}>{n}</div>
+                  <div style={{fontSize:12,color:C.gray,lineHeight:1.5,marginTop:3}}>{l}</div>
+                </div>
+              ))}
             </div>
-            <div style="display:flex;gap:14px;margin-bottom:20px;align-items:flex-start;">
-              <div style="width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">🎯</div>
-              <div><div style="font-size:14px;font-weight:700;color:#fff;">Founder-Led</div><div style="font-size:12px;color:rgba(255,255,255,.58);margin-top:2px;">Personalised, hands-on — every single time</div></div>
-            </div>
-            <div style="background:var(--yellow);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px;">
-              <span style="font-size:20px;">🛡️</span>
-              <div>
-                <div style="font-size:13px;font-weight:800;color:var(--teal-deep);">6-Month Replacement Guarantee</div>
-                <div style="font-size:11px;color:var(--teal-dark);margin-top:2px;">Conditions apply · Open to discuss</div>
+          </div>
+
+          <div style={{flex:"1 1 340px",display:"flex",justifyContent:"center"}}>
+            <div style={{position:"relative",width:370}}>
+              <div className="float" style={{background:G.card,borderRadius:28,padding:34,boxShadow:`0 28px 72px ${C.teal}44`}}>
+                <div style={{fontSize:11,fontWeight:800,letterSpacing:1.2,color:"rgba(255,255,255,.5)",textTransform:"uppercase",marginBottom:22}}>Elite Minds, Exceptional Matches!</div>
+                {[["🚀","Startups","Strategic hiring for nimble, fast-moving teams"],
+                  ["📈","Scaling SMEs","Growth-driven talent solutions that don't slow you down"],
+                  ["🏢","Enterprises","Embedded, multi-person talent teams at scale"],
+                  ["🎯","Founder-Led","Personalised, hands-on — every single time"]]
+                  .map(([icon,title,desc])=>(
+                  <div key={title} style={{display:"flex",gap:14,marginBottom:20,alignItems:"flex-start"}}>
+                    <div style={{width:38,height:38,borderRadius:11,background:"rgba(255,255,255,.1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,flexShrink:0}}>{icon}</div>
+                    <div>
+                      <div style={{fontSize:14,fontWeight:700,color:"#fff"}}>{title}</div>
+                      <div style={{fontSize:12,color:"rgba(255,255,255,.58)",marginTop:2,lineHeight:1.5}}>{desc}</div>
+                    </div>
+                  </div>
+                ))}
+                <div style={{background:C.yellow,borderRadius:14,padding:"14px 18px",display:"flex",alignItems:"center",gap:12,marginTop:4}}>
+                  <span style={{fontSize:20}}>🛡️</span>
+                  <div>
+                    <div style={{fontSize:13,fontWeight:800,color:C.tealDeep}}>Replacement Guarantee</div>
+                    <div style={{fontSize:11,color:C.tealDark,marginTop:2}}>Conditions apply as per role & package</div>
+                  </div>
+                </div>
+              </div>
+              <div className="drift" style={{position:"absolute",top:-20,right:-18,background:"#fff",border:`1px solid ${C.tealLight}`,borderRadius:16,padding:"10px 18px",boxShadow:`0 8px 28px rgba(0,0,0,.1)`}}>
+                <div style={{fontSize:11,fontWeight:800,color:C.teal,letterSpacing:.3}}>Fast. Focused.</div>
+                <div style={{fontSize:11,fontWeight:800,color:C.yellowDark}}>Founder-Friendly. ✦</div>
+              </div>
+              <div className="drift" style={{position:"absolute",bottom:-18,left:-20,background:C.tealDeep,borderRadius:14,padding:"10px 16px",boxShadow:`0 8px 28px ${C.tealDeep}44`,animationDelay:"2s"}}>
+                <div style={{fontSize:11,color:"rgba(255,255,255,.6)"}}>Hiring partner for</div>
+                <div style={{fontSize:12,fontWeight:800,color:"#fff"}}>Startups → Enterprises</div>
               </div>
             </div>
           </div>
-          <div class="drift" style="position:absolute;top:-20px;right:-18px;background:#fff;border:1px solid var(--teal-light);border-radius:16px;padding:10px 18px;box-shadow:0 8px 28px rgba(0,0,0,.1);">
-            <div style="font-size:11px;font-weight:800;color:var(--teal);">Fast. Focused.</div>
-            <div style="font-size:11px;font-weight:800;color:var(--yellow-dark);">Founder-Friendly. ✦</div>
+        </div>
+      </div>
+
+      <div style={{overflow:"hidden",marginTop:80,borderTop:`1px solid ${C.tealLight}`,borderBottom:`1px solid ${C.tealLight}`,padding:"15px 0",background:"rgba(255,255,255,.6)"}}>
+        <div style={{display:"flex",animation:"marquee 22s linear infinite",whiteSpace:"nowrap",width:"max-content"}}>
+          {[...Array(2)].map((_,ri)=>
+            ["Executive Search","High-Volume Hiring","Employer Branding","Talent Mapping","HR Advisory","Psychometric Testing","Executive Coaching","Skills Assessment","HR Policy Design","Flexible Pricing","Onboarding Design","Compensation Design"].map((s,i)=>(
+              <span key={`${ri}-${i}`} style={{fontSize:13,fontWeight:700,color:C.tealDark,padding:"0 32px",opacity:.7}}>
+                <span style={{color:C.yellow,marginRight:12}}>✦</span>{s}
+              </span>
+            ))
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Stats(){
+  const items=[["100+","Positions Filled"],["6","Month Guarantee*"],["4 Tiers","Flex Pricing"],["24hr","Avg Response"]];
+  return(
+    <section style={{background:C.tealPale,padding:"60px 5vw"}}>
+      <div style={{maxWidth:1160,margin:"0 auto",display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:24}}>
+        {items.map(([n,l])=>(
+          <div key={l} style={{textAlign:"center",padding:"20px 12px"}}>
+            <div style={{fontSize:46,fontWeight:800,color:C.teal,letterSpacing:-2,lineHeight:1}}>{n}</div>
+            <div style={{fontSize:14,fontWeight:600,color:C.tealDeep,marginTop:8}}>{l}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Services(){
+  const svcs=[
+    ["🔍","Executive Search","Discreet, market-mapped leadership hiring. We go quiet, deep, and precise for mid to senior placements.","teal"],
+    ["⚡","High-Volume Hiring","Fast screening and bulk onboarding pipelines built for rapid team expansion without sacrificing quality.","yellow"],
+    ["📣","Employer Branding","Turn your company into a talent magnet. Outreach strategies that attract top-tier candidates to you.","teal"],
+    ["🗺️","Talent Mapping","Workforce planning built to scale. We map today's hires to tomorrow's growth trajectory.","yellow"],
+    ["🤝","HR Advisory & Onboarding","Retention-first design from day one. Because great hiring doesn't end with the offer letter.","teal"],
+    ["🧠","Add-On Services","Psychometric testing, skills assessments, executive coaching, HR consulting — all under one roof.","yellow"],
+  ];
+  return(
+    <section id="services" style={{padding:"104px 5vw",position:"relative",overflow:"hidden",background:"#fff"}}>
+      <Blob x="78%" y="10%" w={400} color={C.tealPale} op={.7} delay={1}/>
+      <Blob x="-4%" y="60%" w={300} color={C.yellowLight} op={.8} delay={2}/>
+      <div style={{maxWidth:1160,margin:"0 auto",position:"relative",zIndex:1}}>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 2fr",gap:80,alignItems:"start",flexWrap:"wrap"}}>
+          <div style={{position:"sticky",top:110}}>
+            <div className="chip" style={{background:C.tealPale,color:C.tealDark,marginBottom:18}}>What We Do</div>
+            <h2 style={{fontSize:42,fontWeight:800,color:C.tealDeep,lineHeight:1.12,letterSpacing:-1.2,marginBottom:18}}>
+              Capabilities<br/>Built for<br/><span style={{color:C.teal}}>Real Growth</span>
+            </h2>
+            <p style={{fontSize:15,color:C.gray,lineHeight:1.75,marginBottom:28}}>From the first hire to enterprise-scale teams — we cover every stage, every level, every need.</p>
+            <div style={{background:C.yellowLight,border:`1px solid ${C.yellowMid}`,borderRadius:16,padding:"16px 18px"}}>
+              <div style={{fontSize:13,fontWeight:700,color:C.yellowDark,marginBottom:4}}>✦ Flexible by design</div>
+              <div style={{fontSize:13,color:C.ink,lineHeight:1.6}}>Every engagement is tailored. Not sure which service fits? Let's talk — we'll build the right model together.</div>
+            </div>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))",gap:16}}>
+            {svcs.map(([icon,title,desc,accent],i)=>(
+              <div key={title} className="card-hover" style={{
+                background:accent==="yellow"?C.yellowLight:C.tealGhost,
+                border:`1.5px solid ${accent==="yellow"?C.yellowMid:C.tealLight}`,
+                borderRadius:22,padding:"28px 24px",cursor:"default"
+              }}>
+                <div style={{width:50,height:50,borderRadius:15,background:accent==="yellow"?G.yellow:G.teal,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,marginBottom:18}}>{icon}</div>
+                <h3 style={{fontSize:16,fontWeight:800,color:C.tealDeep,marginBottom:10}}>{title}</h3>
+                <p style={{fontSize:14,color:C.gray,lineHeight:1.65}}>{desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  <!-- Marquee -->
-  <div style="overflow:hidden;border-top:1px solid var(--teal-light);border-bottom:1px solid var(--teal-light);padding:15px 0;background:rgba(255,255,255,.6);">
-    <div style="display:flex;animation:marquee 22s linear infinite;white-space:nowrap;width:max-content;">
-      <span style="font-size:13px;font-weight:700;color:var(--teal-dark);padding:0 32px;opacity:.7;"><span style="color:var(--yellow);margin-right:12px;">✦</span>Executive Search</span>
-      <span style="font-size:13px;font-weight:700;color:var(--teal-dark);padding:0 32px;opacity:.7;"><span style="color:var(--yellow);margin-right:12px;">✦</span>High-Volume Hiring</span>
-      <span style="font-size:13px;font-weight:700;color:var(--teal-dark);padding:0 32px;opacity:.7;"><span style="color:var(--yellow);margin-right:12px;">✦</span>Employer Branding</span>
-      <span style="font-size:13px;font-weight:700;color:var(--teal-dark);padding:0 32px;opacity:.7;"><span style="color:var(--yellow);margin-right:12px;">✦</span>Talent Mapping</span>
-      <span style="font-size:13px;font-weight:700;color:var(--teal-dark);padding:0 32px;opacity:.7;"><span style="color:var(--yellow);margin-right:12px;">✦</span>HR Advisory</span>
-      <span style="font-size:13px;font-weight:700;color:var(--teal-dark);padding:0 32px;opacity:.7;"><span style="color:var(--yellow);margin-right:12px;">✦</span>Flexible Pricing</span>
-      <span style="font-size:13px;font-weight:700;color:var(--teal-dark);padding:0 32px;opacity:.7;"><span style="color:var(--yellow);margin-right:12px;">✦</span>Executive Search</span>
-      <span style="font-size:13px;font-weight:700;color:var(--teal-dark);padding:0 32px;opacity:.7;"><span style="color:var(--yellow);margin-right:12px;">✦</span>High-Volume Hiring</span>
-      <span style="font-size:13px;font-weight:700;color:var(--teal-dark);padding:0 32px;opacity:.7;"><span style="color:var(--yellow);margin-right:12px;">✦</span>Employer Branding</span>
-      <span style="font-size:13px;font-weight:700;color:var(--teal-dark);padding:0 32px;opacity:.7;"><span style="color:var(--yellow);margin-right:12px;">✦</span>Talent Mapping</span>
-      <span style="font-size:13px;font-weight:700;color:var(--teal-dark);padding:0 32px;opacity:.7;"><span style="color:var(--yellow);margin-right:12px;">✦</span>HR Advisory</span>
-      <span style="font-size:13px;font-weight:700;color:var(--teal-dark);padding:0 32px;opacity:.7;"><span style="color:var(--yellow);margin-right:12px;">✦</span>Flexible Pricing</span>
-    </div>
-  </div>
-</section>
+    </section>
+  );
+}
 
-<!-- STATS -->
-<section style="background:var(--teal-pale);padding:60px 5vw;">
-  <div class="inner" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:24px;">
-    <div style="text-align:center;padding:20px 12px;"><div style="font-size:46px;font-weight:800;color:var(--teal);letter-spacing:-2px;line-height:1;">100+</div><div style="font-size:14px;font-weight:600;color:var(--teal-deep);margin-top:8px;">Positions Filled</div></div>
-    <div style="text-align:center;padding:20px 12px;"><div style="font-size:46px;font-weight:800;color:var(--teal);letter-spacing:-2px;line-height:1;">6</div><div style="font-size:14px;font-weight:600;color:var(--teal-deep);margin-top:8px;">Month Guarantee*</div></div>
-    <div style="text-align:center;padding:20px 12px;"><div style="font-size:46px;font-weight:800;color:var(--teal);letter-spacing:-2px;line-height:1;">4</div><div style="font-size:14px;font-weight:600;color:var(--teal-deep);margin-top:8px;">Flexible Plans</div></div>
-    <div style="text-align:center;padding:20px 12px;"><div style="font-size:46px;font-weight:800;color:var(--teal);letter-spacing:-2px;line-height:1;">24hr</div><div style="font-size:14px;font-weight:600;color:var(--teal-deep);margin-top:8px;">Avg Response</div></div>
-  </div>
-</section>
+function Process(){
+  const steps=[
+    ["Discovery","60–90 min founder brief — we define the role, success metrics, culture DNA, and must-haves. This is where most firms skip; we obsess.","🔭"],
+    ["Precision Sourcing","AI-powered searches targeting passive, high-fit candidates who aren't on job boards. The talent that's already employed and performing.","🎯"],
+    ["Triple-filter Screening","Every candidate cleared on skill depth, culture alignment, and compensation fit — before they ever reach your calendar.","🔬"],
+    ["Interview Orchestration","We run the full coordination end-to-end. Scheduling, prep, debrief facilitation. Seamless for you, impressive for candidates.","🎬"],
+    ["Onboard & Measure","Structured success checks at weeks 1, 2, 4, 8, and 12. We don't vanish after the offer — we stay until the hire sticks.","📊"],
+  ];
+  return(
+    <section id="process" style={{background:G.deep,padding:"104px 5vw",position:"relative",overflow:"hidden"}}>
+      <Blob x="-8%" y="20%" w={500} color={C.tealMid} op={.06} delay={0}/>
+      <Blob x="72%" y="55%" w={420} color={C.yellow} op={.05} delay={2}/>
+      <div style={{maxWidth:1160,margin:"0 auto",position:"relative",zIndex:1}}>
+        <div style={{textAlign:"center",marginBottom:72}}>
+          <div className="chip" style={{background:"rgba(245,197,24,.15)",color:C.yellow,marginBottom:18}}>How We Work</div>
+          <h2 style={{fontSize:48,fontWeight:800,color:"#fff",letterSpacing:-1.5,lineHeight:1.08,marginBottom:16}}>
+            Our 5-Step<br/><span style={{color:C.tealMid}}>Hiring Flow</span>
+          </h2>
+          <p style={{color:"rgba(255,255,255,.5)",fontSize:16,maxWidth:460,margin:"0 auto"}}>Structured. Proven. Built to deliver talent that drives results — not just fills desks.</p>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:16,marginBottom:40}}>
+          {steps.map(([title,desc,icon],i)=>(
+            <div key={title} style={{
+              background:i===2?"rgba(245,197,24,.1)":"rgba(255,255,255,.04)",
+              border:`1px solid ${i===2?"rgba(245,197,24,.3)":"rgba(255,255,255,.07)"}`,
+              borderRadius:22,padding:"28px 22px",position:"relative",overflow:"hidden"
+            }}>
+              <div style={{position:"absolute",top:16,right:18,fontSize:11,fontWeight:800,color:i===2?C.yellow:"rgba(255,255,255,.2)"}}>0{i+1}</div>
+              <div style={{fontSize:28,marginBottom:16}}>{icon}</div>
+              <h3 style={{fontSize:15,fontWeight:800,color:i===2?C.yellow:"#fff",marginBottom:10}}>{title}</h3>
+              <p style={{fontSize:13,color:"rgba(255,255,255,.5)",lineHeight:1.65}}>{desc}</p>
+            </div>
+          ))}
+        </div>
+        <div style={{background:G.yellow,borderRadius:22,padding:"26px 36px",display:"flex",alignItems:"center",gap:20,flexWrap:"wrap",justifyContent:"space-between"}}>
+          <div style={{display:"flex",alignItems:"center",gap:16}}>
+            <span style={{fontSize:32}}>🛡️</span>
+            <div>
+              <div style={{fontSize:20,fontWeight:800,color:C.tealDeep}}>6-Month Replacement Guarantee</div>
+              <div style={{fontSize:14,color:C.tealDark,marginTop:3}}>If the hire leaves within 6 months, we replace them. Conditions apply — and we're open to discussing what works for you.</div>
+            </div>
+          </div>
+          <div style={{fontSize:13,color:C.tealDark,fontStyle:"italic",opacity:.7,maxWidth:220}}>*Conditions discussed and agreed upfront. No surprises.</div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-<!-- SERVICES -->
-<section id="services" style="padding:104px 5vw;background:#fff;">
-  <div class="blob" style="left:78%;top:10%;width:400px;height:400px;background:var(--teal-pale);opacity:.7;"></div>
-  <div class="inner">
-    <div style="display:grid;grid-template-columns:280px 1fr;gap:80px;align-items:start;">
-      <div style="position:sticky;top:110px;">
-        <div class="chip" style="background:var(--teal-pale);color:var(--teal-dark);margin-bottom:18px;">What We Do</div>
-        <h2 style="font-size:42px;font-weight:800;color:var(--teal-deep);line-height:1.12;letter-spacing:-1.2px;margin-bottom:18px;">Capabilities<br/>Built for<br/><span style="color:var(--teal);">Real Growth</span></h2>
-        <p style="font-size:15px;color:var(--gray);line-height:1.75;margin-bottom:28px;">From the first hire to enterprise-scale teams — every stage, every level.</p>
-        <div style="background:var(--yellow-light);border:1px solid var(--yellow-mid);border-radius:16px;padding:16px 18px;">
-          <div style="font-size:13px;font-weight:700;color:var(--yellow-dark);margin-bottom:4px;">✦ Flexible by design</div>
-          <div style="font-size:13px;color:var(--ink);line-height:1.6;">Not sure which service fits? Let's talk — we'll build the right model together.</div>
+function Pricing({onForm}){
+  const plans=[
+    {name:"Starter Lite",for:"Bootstrapped Startups",price:"₹22K",unit:"per hire",featured:false,
+     items:["₹22K one-off · or ₹75K/quarter","Up to 4 hires per quarter","Entry-level positions","End-to-end support","Replacement guarantee · conditions apply"],
+     bg:"#fff",border:C.tealLight,tagBg:C.tealPale,tagColor:C.tealDark},
+    {name:"SME Growth",for:"Scaling Businesses",price:"₹2.5–3L",unit:"/ quarter",featured:true,
+     items:["4–6 hires · 2 bonus FREE","Dedicated Talent Partner","Weekly syncs + employer branding","90-day onboarding support","Replacement guarantee · conditions apply"],
+     bg:C.tealDark,border:C.tealDark,tagBg:"rgba(245,197,24,.2)",tagColor:C.yellow},
+    {name:"Mid-Market",for:"Growing Enterprises",price:"₹5–7L",unit:"/ quarter",featured:false,
+     items:["6–10 hires · 3 bonus FREE","Multi-person talent team","Talent mapping & EVP","Advanced screening & onboarding","6-month replacement guarantee*"],
+     bg:C.yellowLight,border:C.yellowMid,tagBg:"rgba(245,197,24,.3)",tagColor:C.yellowDark},
+    {name:"Enterprise",for:"Large Organisations",price:"₹12L+",unit:"/ quarter",featured:false,
+     items:["15–25 hires per quarter","Unlimited sourcing & screening","Embedded full talent team","Legal support & data dashboards","Custom retainer · fully flexible"],
+     bg:C.tealGhost,border:C.tealLight,tagBg:C.tealPale,tagColor:C.tealDark},
+  ];
+  return(
+    <section id="pricing" style={{padding:"104px 5vw",position:"relative",overflow:"hidden",background:C.offWhite}}>
+      <Blob x="-4%" y="40%" w={380} color={C.yellow} op={.09} delay={1}/>
+      <Blob x="80%" y="20%" w={340} color={C.tealMid} op={.1} delay={2}/>
+      <div style={{maxWidth:1160,margin:"0 auto",position:"relative",zIndex:1}}>
+        <div style={{textAlign:"center",marginBottom:24}}>
+          <div className="chip" style={{background:C.tealPale,color:C.tealDark,marginBottom:18}}>Transparent Pricing</div>
+          <h2 style={{fontSize:48,fontWeight:800,color:C.tealDeep,letterSpacing:-1.5,marginBottom:14}}>Plans for Every Stage</h2>
+          <p style={{color:C.gray,fontSize:16,maxWidth:560,margin:"0 auto"}}>All pricing in INR. GST applicable. Per-hire options available across all tiers.</p>
         </div>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;">
-        <div class="card-hover" style="background:var(--teal-ghost);border:1.5px solid var(--teal-light);border-radius:22px;padding:28px 24px;">
-          <div style="width:50px;height:50px;border-radius:15px;background:linear-gradient(135deg,var(--teal),var(--teal-dark));display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px;">🔍</div>
-          <h3 style="font-size:16px;font-weight:800;color:var(--teal-deep);margin-bottom:10px;">Executive Search</h3>
-          <p style="font-size:14px;color:var(--gray);line-height:1.65;">Discreet, market-mapped leadership hiring for mid to senior roles.</p>
-        </div>
-        <div class="card-hover" style="background:var(--yellow-light);border:1.5px solid var(--yellow-mid);border-radius:22px;padding:28px 24px;">
-          <div style="width:50px;height:50px;border-radius:15px;background:linear-gradient(135deg,var(--yellow),var(--yellow-dark));display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px;">⚡</div>
-          <h3 style="font-size:16px;font-weight:800;color:var(--teal-deep);margin-bottom:10px;">High-Volume Hiring</h3>
-          <p style="font-size:14px;color:var(--gray);line-height:1.65;">Fast screening and bulk onboarding for rapid team expansion.</p>
-        </div>
-        <div class="card-hover" style="background:var(--teal-ghost);border:1.5px solid var(--teal-light);border-radius:22px;padding:28px 24px;">
-          <div style="width:50px;height:50px;border-radius:15px;background:linear-gradient(135deg,var(--teal),var(--teal-dark));display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px;">📣</div>
-          <h3 style="font-size:16px;font-weight:800;color:var(--teal-deep);margin-bottom:10px;">Employer Branding</h3>
-          <p style="font-size:14px;color:var(--gray);line-height:1.65;">Magnetic talent outreach strategies that attract top-tier candidates.</p>
-        </div>
-        <div class="card-hover" style="background:var(--yellow-light);border:1.5px solid var(--yellow-mid);border-radius:22px;padding:28px 24px;">
-          <div style="width:50px;height:50px;border-radius:15px;background:linear-gradient(135deg,var(--yellow),var(--yellow-dark));display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px;">🗺️</div>
-          <h3 style="font-size:16px;font-weight:800;color:var(--teal-deep);margin-bottom:10px;">Talent Mapping</h3>
-          <p style="font-size:14px;color:var(--gray);line-height:1.65;">Future-proofed workforce planning built to scale with your growth.</p>
-        </div>
-        <div class="card-hover" style="background:var(--teal-ghost);border:1.5px solid var(--teal-light);border-radius:22px;padding:28px 24px;">
-          <div style="width:50px;height:50px;border-radius:15px;background:linear-gradient(135deg,var(--teal),var(--teal-dark));display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px;">🤝</div>
-          <h3 style="font-size:16px;font-weight:800;color:var(--teal-deep);margin-bottom:10px;">HR Advisory</h3>
-          <p style="font-size:14px;color:var(--gray);line-height:1.65;">Retention-first onboarding design for long-term team success.</p>
-        </div>
-        <div class="card-hover" style="background:var(--yellow-light);border:1.5px solid var(--yellow-mid);border-radius:22px;padding:28px 24px;">
-          <div style="width:50px;height:50px;border-radius:15px;background:linear-gradient(135deg,var(--yellow),var(--yellow-dark));display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px;">🧠</div>
-          <h3 style="font-size:16px;font-weight:800;color:var(--teal-deep);margin-bottom:10px;">Add-On Services</h3>
-          <p style="font-size:14px;color:var(--gray);line-height:1.65;">Psychometric testing, skills assessments & executive coaching.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- PROCESS -->
-<section id="process" style="background:linear-gradient(160deg,#04342C 0%,#0a1a14 100%);padding:104px 5vw;">
-  <div class="blob" style="left:-8%;top:20%;width:500px;height:500px;background:var(--teal-mid);opacity:.06;"></div>
-  <div class="inner">
-    <div style="text-align:center;margin-bottom:72px;">
-      <div class="chip" style="background:rgba(245,197,24,.15);color:var(--yellow);margin-bottom:18px;">How We Work</div>
-      <h2 style="font-size:48px;font-weight:800;color:#fff;letter-spacing:-1.5px;line-height:1.08;margin-bottom:16px;">Our 5-Step<br/><span style="color:var(--teal-mid);">Hiring Flow</span></h2>
-      <p style="color:rgba(255,255,255,.5);font-size:16px;max-width:460px;margin:0 auto;">Structured. Proven. Built to deliver talent that drives results — not just fills desks.</p>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:40px;">
-      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:22px;padding:28px 22px;position:relative;">
-        <div style="position:absolute;top:16px;right:18px;font-size:11px;font-weight:800;color:rgba(255,255,255,.2);">01</div>
-        <div style="font-size:28px;margin-bottom:16px;">🔭</div>
-        <h3 style="font-size:15px;font-weight:800;color:#fff;margin-bottom:10px;">Discovery</h3>
-        <p style="font-size:13px;color:rgba(255,255,255,.5);line-height:1.65;">60–90 min founder brief — we define the role, success metrics, and culture DNA.</p>
-      </div>
-      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:22px;padding:28px 22px;position:relative;">
-        <div style="position:absolute;top:16px;right:18px;font-size:11px;font-weight:800;color:rgba(255,255,255,.2);">02</div>
-        <div style="font-size:28px;margin-bottom:16px;">🎯</div>
-        <h3 style="font-size:15px;font-weight:800;color:#fff;margin-bottom:10px;">Precision Sourcing</h3>
-        <p style="font-size:13px;color:rgba(255,255,255,.5);line-height:1.65;">AI-powered searches targeting passive, high-fit candidates not on job boards.</p>
-      </div>
-      <div style="background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.3);border-radius:22px;padding:28px 22px;position:relative;">
-        <div style="position:absolute;top:16px;right:18px;font-size:11px;font-weight:800;color:var(--yellow);">03</div>
-        <div style="font-size:28px;margin-bottom:16px;">🔬</div>
-        <h3 style="font-size:15px;font-weight:800;color:var(--yellow);margin-bottom:10px;">Triple-filter Screening</h3>
-        <p style="font-size:13px;color:rgba(255,255,255,.5);line-height:1.65;">Every candidate cleared on skill, culture, and compensation fit — before they reach you.</p>
-      </div>
-      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:22px;padding:28px 22px;position:relative;">
-        <div style="position:absolute;top:16px;right:18px;font-size:11px;font-weight:800;color:rgba(255,255,255,.2);">04</div>
-        <div style="font-size:28px;margin-bottom:16px;">🎬</div>
-        <h3 style="font-size:15px;font-weight:800;color:#fff;margin-bottom:10px;">Interview Orchestration</h3>
-        <p style="font-size:13px;color:rgba(255,255,255,.5);line-height:1.65;">End-to-end coordination — scheduling, prep, debrief. Seamless for your team.</p>
-      </div>
-      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:22px;padding:28px 22px;position:relative;">
-        <div style="position:absolute;top:16px;right:18px;font-size:11px;font-weight:800;color:rgba(255,255,255,.2);">05</div>
-        <div style="font-size:28px;margin-bottom:16px;">📊</div>
-        <h3 style="font-size:15px;font-weight:800;color:#fff;margin-bottom:10px;">Onboard & Measure</h3>
-        <p style="font-size:13px;color:rgba(255,255,255,.5);line-height:1.65;">Success checks at weeks 1, 2, 4, 8, and 12. We stay until the hire sticks.</p>
-      </div>
-    </div>
-    <div style="background:linear-gradient(135deg,var(--yellow),var(--yellow-dark));border-radius:22px;padding:26px 36px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:space-between;">
-      <div style="display:flex;align-items:center;gap:16px;">
-        <span style="font-size:32px;">🛡️</span>
-        <div>
-          <div style="font-size:20px;font-weight:800;color:var(--teal-deep);">6-Month Replacement Guarantee</div>
-          <div style="font-size:14px;color:var(--teal-dark);margin-top:3px;">If the hire leaves within 6 months, we replace them. Conditions apply — open to discuss what works for you.</div>
+        <div style={{background:`linear-gradient(135deg,${C.tealDeep}ee,${C.teal}cc)`,borderRadius:22,padding:"20px 32px",marginBottom:36,display:"flex",alignItems:"center",gap:16,flexWrap:"wrap",justifyContent:"space-between"}}>
+          <div style={{display:"flex",alignItems:"center",gap:14}}>
+            <span style={{fontSize:26}}>💡</span>
+            <div>
+              <div style={{fontSize:16,fontWeight:800,color:"#fff"}}>Every plan is a starting point, not a ceiling.</div>
+              <div style={{fontSize:14,color:"rgba(255,255,255,.65)",marginTop:2}}>We're open to building a completely custom, flexible hiring model that fits your budget and goals. Just ask.</div>
+            </div>
+          </div>
+          <button className="btn-yellow" style={{padding:"11px 24px",fontSize:14,flexShrink:0}} onClick={onForm}>Let's Discuss →</button>
         </div>
-      </div>
-      <div style="font-size:13px;color:var(--teal-dark);font-style:italic;opacity:.7;">*Conditions agreed upfront. No surprises.</div>
-    </div>
-  </div>
-</section>
 
-<!-- PRICING -->
-<section id="pricing" style="padding:104px 5vw;background:var(--teal-ghost);">
-  <div class="inner">
-    <div style="text-align:center;margin-bottom:24px;">
-      <div class="chip" style="background:var(--teal-pale);color:var(--teal-dark);margin-bottom:18px;">Transparent Pricing</div>
-      <h2 style="font-size:48px;font-weight:800;color:var(--teal-deep);letter-spacing:-1.5px;margin-bottom:14px;">Plans for Every Stage</h2>
-      <p style="color:var(--gray);font-size:16px;max-width:560px;margin:0 auto;">All pricing in INR. GST applicable. Per-hire options available across all tiers.</p>
-    </div>
-    <div style="background:linear-gradient(135deg,rgba(8,80,65,.95),rgba(29,158,117,.85));border-radius:22px;padding:20px 32px;margin-bottom:36px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:space-between;">
-      <div style="display:flex;align-items:center;gap:14px;">
-        <span style="font-size:26px;">💡</span>
-        <div>
-          <div style="font-size:16px;font-weight:800;color:#fff;">Every plan is a starting point, not a ceiling.</div>
-          <div style="font-size:14px;color:rgba(255,255,255,.65);margin-top:2px;">We're open to building a completely custom, flexible hiring model that fits your budget and goals.</div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(230px,1fr))",gap:16,alignItems:"start"}}>
+          {plans.map((p,i)=>(
+            <div key={p.name} style={{
+              background:p.bg,border:`${p.featured?"0":"1.5px"} solid ${p.border}`,
+              borderRadius:26,padding:"32px 26px",
+              transform:p.featured?"scale(1.05)":"none",
+              boxShadow:p.featured?`0 28px 72px ${C.teal}36`:"none",
+              position:"relative",overflow:"hidden"
+            }}>
+              {p.featured&&<div style={{position:"absolute",top:0,right:0,background:G.yellow,borderRadius:"0 26px 0 18px",padding:"9px 22px",fontSize:12,fontWeight:800,color:C.tealDeep}}>Most Popular</div>}
+              <div className="chip" style={{background:p.tagBg,color:p.tagColor,fontSize:11,marginBottom:14,padding:"4px 12px"}}>{p.for}</div>
+              <div style={{fontSize:21,fontWeight:800,color:p.featured?"#fff":C.tealDeep,marginBottom:6}}>{p.name}</div>
+              <div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:24,paddingBottom:22,borderBottom:`1px solid ${p.featured?"rgba(255,255,255,.1)":C.tealLight}`}}>
+                <span style={{fontSize:34,fontWeight:800,color:p.featured?C.yellow:C.teal,letterSpacing:-1}}>{p.price}</span>
+                <span style={{fontSize:14,color:p.featured?"rgba(255,255,255,.45)":C.gray}}>{p.unit}</span>
+              </div>
+              <div style={{marginBottom:28}}>
+                {p.items.map(item=>(
+                  <div key={item} style={{display:"flex",gap:10,marginBottom:12,alignItems:"flex-start"}}>
+                    <span style={{width:20,height:20,borderRadius:"50%",background:p.featured?C.yellow:C.tealPale,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,flexShrink:0,marginTop:1,color:p.featured?C.tealDeep:C.teal,fontWeight:800}}>✓</span>
+                    <span style={{fontSize:13,color:p.featured?"rgba(255,255,255,.78)":C.ink,lineHeight:1.55}}>{item}</span>
+                  </div>
+                ))}
+              </div>
+              <button className={p.featured?"btn-yellow":"btn-ghost"} style={{width:"100%",justifyContent:"center"}} onClick={onForm}>
+                {i===3?"Talk to Us →":"Get Started →"}
+              </button>
+            </div>
+          ))}
+        </div>
+        <div style={{textAlign:"center",marginTop:28,fontSize:13,color:C.gray}}>
+          *6-month replacement guarantee applies under mutually agreed conditions. Pricing is a guide — we'll always find a model that works for your situation.
         </div>
       </div>
-      <button class="btn-yellow" style="padding:11px 24px;font-size:14px;" onclick="openForm()">Let's Discuss →</button>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;align-items:start;">
-      <div style="background:#fff;border:1.5px solid var(--teal-light);border-radius:26px;padding:32px 26px;">
-        <div class="chip" style="background:var(--teal-pale);color:var(--teal-dark);font-size:11px;margin-bottom:14px;padding:4px 12px;">Bootstrapped Startups</div>
-        <div style="font-size:21px;font-weight:800;color:var(--teal-deep);margin-bottom:6px;">Starter Lite</div>
-        <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:24px;padding-bottom:22px;border-bottom:1px solid var(--teal-light);">
-          <span style="font-size:34px;font-weight:800;color:var(--teal);letter-spacing:-1px;">₹22K</span>
-          <span style="font-size:14px;color:var(--gray);">per hire</span>
-        </div>
-        <div style="margin-bottom:28px;">
-          <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;"><span style="width:20px;height:20px;border-radius:50%;background:var(--teal-pale);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;color:var(--teal);font-weight:800;">✓</span><span style="font-size:13px;color:var(--ink);line-height:1.55;">₹22K one-off · or ₹75K/quarter</span></div>
-          <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;"><span style="width:20px;height:20px;border-radius:50%;background:var(--teal-pale);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;color:var(--teal);font-weight:800;">✓</span><span style="font-size:13px;color:var(--ink);line-height:1.55;">Up to 4 hires per quarter</span></div>
-          <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;"><span style="width:20px;height:20px;border-radius:50%;background:var(--teal-pale);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;color:var(--teal);font-weight:800;">✓</span><span style="font-size:13px;color:var(--ink);line-height:1.55;">End-to-end support</span></div>
-          <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;"><span style="width:20px;height:20px;border-radius:50%;background:var(--teal-pale);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;color:var(--teal);font-weight:800;">✓</span><span style="font-size:13px;color:var(--ink);line-height:1.55;">6-month replacement guarantee*</span></div>
-        </div>
-        <button class="btn-ghost" style="width:100%;justify-content:center;" onclick="openForm()">Get Started →</button>
-      </div>
-      <div style="background:var(--teal-dark);border-radius:26px;padding:32px 26px;transform:scale(1.05);box-shadow:0 28px 72px rgba(29,158,117,.3);position:relative;overflow:hidden;">
-        <div style="position:absolute;top:0;right:0;background:linear-gradient(135deg,var(--yellow),var(--yellow-dark));border-radius:0 26px 0 18px;padding:9px 22px;font-size:12px;font-weight:800;color:var(--teal-deep);">Most Popular</div>
-        <div class="chip" style="background:rgba(245,197,24,.2);color:var(--yellow);font-size:11px;margin-bottom:14px;padding:4px 12px;">Scaling Businesses</div>
-        <div style="font-size:21px;font-weight:800;color:#fff;margin-bottom:6px;">SME Growth</div>
-        <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:24px;padding-bottom:22px;border-bottom:1px solid rgba(255,255,255,.1);">
-          <span style="font-size:34px;font-weight:800;color:var(--yellow);letter-spacing:-1px;">₹2.5–3L</span>
-          <span style="font-size:14px;color:rgba(255,255,255,.45);">/ quarter</span>
-        </div>
-        <div style="margin-bottom:28px;">
-          <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;"><span style="width:20px;height:20px;border-radius:50%;background:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;color:var(--teal-deep);font-weight:800;">✓</span><span style="font-size:13px;color:rgba(255,255,255,.78);line-height:1.55;">4–6 hires · 2 bonus FREE</span></div>
-          <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;"><span style="width:20px;height:20px;border-radius:50%;background:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;color:var(--teal-deep);font-weight:800;">✓</span><span style="font-size:13px;color:rgba(255,255,255,.78);line-height:1.55;">Dedicated Talent Partner</span></div>
-          <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;"><span style="width:20px;height:20px;border-radius:50%;background:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;color:var(--teal-deep);font-weight:800;">✓</span><span style="font-size:13px;color:rgba(255,255,255,.78);line-height:1.55;">Weekly syncs + employer branding</span></div>
-          <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;"><span style="width:20px;height:20px;border-radius:50%;background:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;color:var(--teal-deep);font-weight:800;">✓</span><span style="font-size:13px;color:rgba(255,255,255,.78);line-height:1.55;">6-month replacement guarantee*</span></div>
-        </div>
-        <button class="btn-yellow" style="width:100%;justify-content:center;" onclick="openForm()">Get Started →</button>
-      </div>
-      <div style="background:var(--yellow-light);border:1.5px solid var(--yellow-mid);border-radius:26px;padding:32px 26px;">
-        <div class="chip" style="background:rgba(245,197,24,.3);color:var(--yellow-dark);font-size:11px;margin-bottom:14px;padding:4px 12px;">Growing Enterprises</div>
-        <div style="font-size:21px;font-weight:800;color:var(--teal-deep);margin-bottom:6px;">Mid-Market</div>
-        <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:24px;padding-bottom:22px;border-bottom:1px solid var(--yellow-mid);">
-          <span style="font-size:34px;font-weight:800;color:var(--teal);letter-spacing:-1px;">₹5–7L</span>
-          <span style="font-size:14px;color:var(--gray);">/ quarter</span>
-        </div>
-        <div style="margin-bottom:28px;">
-          <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;"><span style="width:20px;height:20px;border-radius:50%;background:var(--teal-pale);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;color:var(--teal);font-weight:800;">✓</span><span style="font-size:13px;line-height:1.55;">6–10 hires · 3 bonus FREE</span></div>
-          <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;"><span style="width:20px;height:20px;border-radius:50%;background:var(--teal-pale);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;color:var(--teal);font-weight:800;">✓</span><span style="font-size:13px;line-height:1.55;">Multi-person talent team</span></div>
-          <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;"><span style="width:20px;height:20px;border-radius:50%;background:var(--teal-pale);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;color:var(--teal);font-weight:800;">✓</span><span style="font-size:13px;line-height:1.55;">Talent mapping & EVP</span></div>
-          <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;"><span style="width:20px;height:20px;border-radius:50%;background:var(--teal-pale);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;color:var(--teal);font-weight:800;">✓</span><span style="font-size:13px;line-height:1.55;">6-month replacement guarantee*</span></div>
-        </div>
-        <button class="btn-ghost" style="width:100%;justify-content:center;" onclick="openForm()">Get Started →</button>
-      </div>
-      <div style="background:#fff;border:1.5px solid var(--teal-light);border-radius:26px;padding:32px 26px;">
-        <div class="chip" style="background:var(--teal-pale);color:var(--teal-dark);font-size:11px;margin-bottom:14px;padding:4px 12px;">Large Organisations</div>
-        <div style="font-size:21px;font-weight:800;color:var(--teal-deep);margin-bottom:6px;">Enterprise</div>
-        <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:24px;padding-bottom:22px;border-bottom:1px solid var(--teal-light);">
-          <span style="font-size:34px;font-weight:800;color:var(--teal);letter-spacing:-1px;">₹12L+</span>
-          <span style="font-size:14px;color:var(--gray);">/ quarter</span>
-        </div>
-        <div style="margin-bottom:28px;">
-          <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;"><span style="width:20px;height:20px;border-radius:50%;background:var(--teal-pale);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;color:var(--teal);font-weight:800;">✓</span><span style="font-size:13px;line-height:1.55;">15–25 hires per quarter</span></div>
-          <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;"><span style="width:20px;height:20px;border-radius:50%;background:var(--teal-pale);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;color:var(--teal);font-weight:800;">✓</span><span style="font-size:13px;line-height:1.55;">Embedded full talent team</span></div>
-          <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;"><span style="width:20px;height:20px;border-radius:50%;background:var(--teal-pale);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;color:var(--teal);font-weight:800;">✓</span><span style="font-size:13px;line-height:1.55;">Legal support & dashboards</span></div>
-          <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;"><span style="width:20px;height:20px;border-radius:50%;background:var(--teal-pale);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;color:var(--teal);font-weight:800;">✓</span><span style="font-size:13px;line-height:1.55;">Custom retainer · fully flexible</span></div>
-        </div>
-        <button class="btn-ghost" style="width:100%;justify-content:center;" onclick="openForm()">Talk to Us →</button>
-      </div>
-    </div>
-    <div style="text-align:center;margin-top:28px;font-size:13px;color:var(--gray);">*6-month replacement guarantee applies under mutually agreed conditions. Pricing is a guide — we'll always find a model that works for you.</div>
-  </div>
-</section>
+    </section>
+  );
+}
 
-<!-- FOUNDER -->
-<section style="background:linear-gradient(160deg,#04342C 0%,#0a1a14 100%);padding:80px 5vw;">
-  <div class="inner">
-    <div style="display:flex;gap:60px;align-items:center;flex-wrap:wrap;">
-      <div style="width:130px;height:130px;border-radius:50%;flex-shrink:0;box-shadow:0 0 0 5px rgba(29,158,117,.44),0 0 0 11px rgba(29,158,117,.18);overflow:hidden;background:linear-gradient(135deg,var(--teal),var(--teal-dark));display:flex;align-items:center;justify-content:center;">
-        <span style="font-size:40px;font-weight:800;color:#fff;" id="founder-initials">ED</span>
-        <img id="founder-img" src="https://images.weserv.nl/?url=i.postimg.cc/cCLhPw5h/Untitled-design.png&w=260&h=260&fit=cover&a=top" alt="Esha Dubey" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:none;" onload="this.style.display='block';document.getElementById('founder-initials').style.display='none';" onerror="this.style.display='none';"/>
+function Testimonials(){
+  const t=[
+    ["Ravi S.","Founder, SaaS Startup","RS",C.teal,"SKelite filled 3 critical engineering roles in under 30 days. The quality and speed were unlike anything we'd experienced before. Exactly what a bootstrapped startup needs."],
+    ["Priya M.","HR Head, Mid-Market Firm","PM",C.tealMid,"Esha understood our culture from the first call. The founder-led screening made a massive difference — candidates actually wanted to stay, not just join for the offer."],
+    ["Arjun K.","CEO, E-commerce Brand","AK",C.yellow,"Their 5-step process is genuinely structured, not just talk. We went from zero to a full team in one quarter. The replacement guarantee gave us real peace of mind."],
+  ];
+  return(
+    <section style={{padding:"104px 5vw",background:"#fff",position:"relative",overflow:"hidden"}}>
+      <Blob x="60%" y="0%" w={400} color={C.tealPale} op={.6} delay={1}/>
+      <div style={{maxWidth:1160,margin:"0 auto",position:"relative",zIndex:1}}>
+        <div style={{textAlign:"center",marginBottom:60}}>
+          <div className="chip" style={{background:C.tealPale,color:C.tealDark,marginBottom:18}}>Client Stories</div>
+          <h2 style={{fontSize:48,fontWeight:800,color:C.tealDeep,letterSpacing:-1.5}}>Trusted by Founders<br/>&amp; HR Leaders</h2>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(300px,1fr))",gap:20}}>
+          {t.map(([name,role,initials,accent,quote])=>(
+            <div key={name} className="card-hover" style={{background:"#fff",border:`1.5px solid ${C.tealLight}`,borderRadius:26,padding:"34px",position:"relative",overflow:"hidden"}}>
+              <div style={{position:"absolute",top:0,left:0,right:0,height:4,background:`linear-gradient(90deg,${accent},${accent}88)`}}/>
+              <div style={{display:"flex",gap:4,marginBottom:22}}>
+                {[...Array(5)].map((_,j)=><span key={j} style={{color:C.yellow,fontSize:17}}>★</span>)}
+              </div>
+              <p style={{fontSize:15,color:"#374151",lineHeight:1.8,marginBottom:28,fontStyle:"italic"}}>"{quote}"</p>
+              <div style={{display:"flex",gap:12,alignItems:"center",paddingTop:22,borderTop:`1px solid ${C.tealPale}`}}>
+                <div style={{width:46,height:46,borderRadius:"50%",background:`linear-gradient(135deg,${accent},${accent}bb)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,fontWeight:800,color:accent===C.yellow?C.tealDeep:"#fff"}}>{initials}</div>
+                <div>
+                  <div style={{fontSize:14,fontWeight:800,color:C.tealDeep}}>{name}</div>
+                  <div style={{fontSize:12,color:C.gray}}>{role}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-      <div style="flex:1;min-width:280px;">
-        <div class="chip" style="background:rgba(245,197,24,.15);color:var(--yellow);margin-bottom:14px;">Meet the Founder</div>
-        <h3 style="font-size:32px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-.5px;">Esha Dubey</h3>
-        <div style="font-size:14px;color:var(--teal-light);margin-bottom:16px;font-weight:600;">Founder, SKelite Talent Partners</div>
-        <p style="font-size:15px;color:rgba(255,255,255,.6);line-height:1.75;max-width:580px;">Driven by a clear vision to help companies build the right teams with the right talent, Esha brings a perfectionist mindset and a relentless "we'll get it done" spirit to every engagement. Known for sharp execution and a smart-working approach — where hiring isn't just a task, it's a craft.</p>
+    </section>
+  );
+}
+
+function Founder(){
+  const imgSrc=null;
+  return(
+    <section style={{background:G.deep,padding:"80px 5vw",position:"relative",overflow:"hidden"}}>
+      <Blob x="70%" y="0%" w={400} color={C.tealMid} op={.06} delay={1}/>
+      <div style={{maxWidth:1160,margin:"0 auto",position:"relative",zIndex:1}}>
+        <div style={{display:"flex",gap:60,alignItems:"center",flexWrap:"wrap"}}>
+          <div style={{width:120,height:120,borderRadius:"50%",flexShrink:0,boxShadow:`0 0 0 5px ${C.teal}44,0 0 0 11px ${C.teal}18`,overflow:"hidden",background:G.teal,display:"flex",alignItems:"center",justifyContent:"center"}}>
+            {imgSrc
+            ?<img src={imgSrc} alt="Esha Dubey" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center top"}}/>
+            :<span style={{fontSize:36,fontWeight:800,color:"#fff"}}>ED</span>}
+          </div>
+          <div style={{flex:1,minWidth:280}}>
+            <div className="chip" style={{background:"rgba(245,197,24,.15)",color:C.yellow,marginBottom:14}}>Meet the Founder</div>
+            <h3 style={{fontSize:28,fontWeight:800,color:"#fff",marginBottom:8,letterSpacing:-.5}}>Esha Dubey</h3>
+            <div style={{fontSize:14,color:C.tealLight,marginBottom:16,fontWeight:600}}>Founder, SKelite Talent Partners</div>
+            <p style={{fontSize:15,color:"rgba(255,255,255,.6)",lineHeight:1.75,maxWidth:580}}>Driven by a clear vision to help companies build the right teams with the right talent, Esha brings a perfectionist mindset and a relentless "we'll get it done" spirit to every engagement. Known for sharp execution and a smart-working approach — where hiring isn't just a task, it's a craft.</p>
+          </div>
+          <div style={{display:"flex",gap:10,flexWrap:"wrap",flexShrink:0}}>
+            <a href="tel:+918103108993" className="btn-yellow" style={{display:"inline-flex",textDecoration:"none",padding:"12px 22px",fontSize:14}}>📞 +91 8103108993</a>
+            <a href="https://www.linkedin.com/company/skelite-talent-partners/" target="_blank" rel="noreferrer" className="btn-white" style={{display:"inline-flex",textDecoration:"none",padding:"12px 22px",fontSize:14}}>💼 LinkedIn</a>
+          </div>
+        </div>
       </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;flex-shrink:0;">
-        <a href="tel:+918103108993" class="btn-yellow" style="padding:12px 22px;font-size:14px;">📞 +91 8103108993</a>
-        <a href="https://www.linkedin.com/company/skelite-talent-partners/" target="_blank" class="btn-white" style="padding:12px 22px;font-size:14px;">💼 LinkedIn</a>
+    </section>
+  );
+}
+
+const AI_QS=[
+  "What's your company name, and what industry are you in?",
+  "How many hires are you looking to make — and at what level (entry, mid, senior, or executive)?",
+  "What's your biggest hiring challenge right now?",
+  "What's your timeline, and do you have any budget flexibility in mind?",
+];
+
+function LeadForm({onClose}){
+  const [step,setStep]=useState(0);
+  const [answers,setAnswers]=useState([]);
+  const [input,setInput]=useState("");
+  const [name,setName]=useState(""),[email,setEmail]=useState("");
+  const [loading,setLoading]=useState(false);
+  const [result,setResult]=useState("");
+
+  const handleAnswer=()=>{
+    if(!input.trim())return;
+    const next=[...answers,input.trim()];
+    setAnswers(next);setInput("");
+    if(next.length>=AI_QS.length)setStep(2);
+  };
+
+  const handleSubmit=async()=>{
+    if(!name.trim()||!email.trim())return;
+    setLoading(true);setStep(3);
+    const prompt=`You are a senior talent consultant at SKelite Talent Partners, India's founder-led recruitment firm. Based on this prospect's answers, write a warm, specific 3–4 sentence recommendation. Mention their hiring needs directly, suggest the most relevant SKelite plan or approach, and end with an invitation to book a free discovery call with Esha. Tone: confident, personal, and human — not corporate.\n\nQ: Company & industry? A: ${answers[0]}\nQ: Hires & level? A: ${answers[1]}\nQ: Biggest challenge? A: ${answers[2]}\nQ: Timeline & budget? A: ${answers[3]}\nName: ${name}\n\nWrite directly, no subject line, no preamble.`;
+    try{
+      const res=await fetch("https://api.anthropic.com/v1/messages",{
+        method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:prompt}]})
+      });
+      const data=await res.json();
+      setResult(data.content?.[0]?.text||"Thank you! Our team will be in touch shortly.");
+    }catch{
+      setResult(`Thanks ${name}! Based on what you've shared, SKelite can build a tailored hiring strategy that fits your timeline and budget. Esha will personally review your brief and reach out within 24 hours to kick things off.`);
+    }
+    setLoading(false);
+  };
+
+  return(
+    <div style={{position:"fixed",inset:0,background:"rgba(4,52,44,.65)",zIndex:999,display:"flex",alignItems:"center",justifyContent:"center",padding:20,backdropFilter:"blur(4px)"}}>
+      <div style={{background:"#fff",borderRadius:28,maxWidth:560,width:"100%",maxHeight:"92vh",overflowY:"auto",position:"relative",animation:"scaleIn .3s ease"}}>
+        <div style={{background:G.deep,borderRadius:"28px 28px 0 0",padding:"28px 32px 24px",position:"relative"}}>
+          <button onClick={onClose} style={{position:"absolute",top:16,right:18,background:"rgba(255,255,255,.1)",border:"none",borderRadius:"50%",width:34,height:34,cursor:"pointer",color:"#fff",fontSize:17,display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
+          <div className="chip" style={{background:"rgba(245,197,24,.2)",color:C.yellow,marginBottom:12}}>Free Consultation</div>
+          <h2 style={{fontSize:22,fontWeight:800,color:"#fff",letterSpacing:-.4}}>Let's Find Your Perfect Hire</h2>
+          <p style={{color:"rgba(255,255,255,.55)",fontSize:14,marginTop:6}}>4 quick questions. 1 personalised recommendation.</p>
+          <div style={{display:"flex",gap:6,marginTop:18}}>
+            {AI_QS.map((_,i)=>(
+              <div key={i} style={{flex:1,height:4,borderRadius:4,background:answers.length>i?C.yellow:"rgba(255,255,255,.15)",transition:"background .3s"}}/>
+            ))}
+          </div>
+        </div>
+        <div style={{padding:"28px 32px"}}>
+          {step<=1&&(
+            <div>
+              {answers.map((ans,i)=>(
+                <div key={i} style={{marginBottom:14}}>
+                  <div style={{fontSize:11,fontWeight:800,color:C.teal,marginBottom:4,textTransform:"uppercase",letterSpacing:.4}}>{AI_QS[i]}</div>
+                  <div style={{fontSize:14,color:"#374151",background:C.tealGhost,borderRadius:12,padding:"10px 14px",border:`1px solid ${C.tealPale}`}}>{ans}</div>
+                </div>
+              ))}
+              {answers.length<AI_QS.length&&(
+                <div>
+                  <div style={{fontSize:15,fontWeight:600,color:C.tealDeep,marginBottom:14,padding:"16px 20px",background:C.yellowLight,borderRadius:14,borderLeft:`4px solid ${C.yellow}`}}>
+                    {AI_QS[answers.length]}
+                  </div>
+                  <textarea value={input} onChange={e=>setInput(e.target.value)} placeholder="Type your answer here..." onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();handleAnswer();}}}/>
+                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:14}}>
+                    <span style={{fontSize:12,color:C.gray}}>Question {answers.length+1} of {AI_QS.length}</span>
+                    <button className="btn-teal" style={{padding:"10px 24px",fontSize:14}} onClick={handleAnswer}>Next →</button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+          {step===2&&(
+            <div>
+              <div style={{background:C.tealGhost,border:`1px solid ${C.tealPale}`,borderRadius:16,padding:18,marginBottom:22}}>
+                <div style={{fontSize:13,fontWeight:700,color:C.teal,marginBottom:10}}>✓ All answers saved</div>
+                {answers.map((a,i)=><div key={i} style={{fontSize:13,color:"#374151",marginBottom:6,paddingLeft:10,borderLeft:`2.5px solid ${C.tealLight}`}}>{a}</div>)}
+              </div>
+              <p style={{fontSize:15,fontWeight:700,color:C.tealDeep,marginBottom:16}}>Where should we send your strategy?</p>
+              <input value={name} onChange={e=>setName(e.target.value)} placeholder="Your full name" style={{marginBottom:10}}/>
+              <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="Your work email" type="email" style={{marginBottom:22}}/>
+              <button className="btn-yellow" style={{width:"100%",fontSize:15,padding:15,justifyContent:"center"}} onClick={handleSubmit}>✨ Generate My Recommendation</button>
+            </div>
+          )}
+          {step===3&&(
+            <div style={{textAlign:"center"}}>
+              {loading?(
+                <div style={{padding:"48px 0"}}>
+                  <div style={{width:44,height:44,border:`4px solid ${C.tealPale}`,borderTopColor:C.teal,borderRadius:"50%",margin:"0 auto 18px",animation:"spin .8s linear infinite"}}/>
+                  <p style={{color:C.gray,fontSize:14}}>Crafting your personalised strategy...</p>
+                </div>
+              ):(
+                <div>
+                  <div style={{fontSize:40,marginBottom:16}}>🎯</div>
+                  <h3 style={{fontSize:20,fontWeight:800,color:C.tealDeep,marginBottom:18}}>Your Personalised<br/>Talent Strategy</h3>
+                  <div style={{background:C.tealPale,border:`1.5px solid ${C.tealLight}`,borderRadius:18,padding:"22px 26px",textAlign:"left",fontSize:15,color:"#374151",lineHeight:1.8,marginBottom:22}}>{result}</div>
+                  <p style={{fontSize:13,color:C.gray,marginBottom:22}}>We'll reach out to <strong>{email}</strong> within 24 hours.</p>
+                  <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
+                    <a href="tel:+918103108993" className="btn-teal" style={{display:"inline-flex",textDecoration:"none"}}>📞 Call Esha Now</a>
+                    <a href="https://www.linkedin.com/company/skelite-talent-partners/" target="_blank" rel="noreferrer" className="btn-ghost" style={{display:"inline-flex",textDecoration:"none"}}>💼 LinkedIn</a>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  );
+}
 
-<!-- FOOTER -->
-<footer id="contact" style="background:#0a1a14;padding:88px 5vw 44px;">
-  <div class="inner">
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:52px;margin-bottom:72px;">
-      <div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:22px;">
-          <div class="logo-mark"><span style="color:#fff;font-weight:800;font-size:19px;">SK</span></div>
+function Footer({onForm}){
+  return(
+    <footer id="contact" style={{background:C.dark,padding:"88px 5vw 44px",position:"relative",overflow:"hidden"}}>
+      <Blob x="65%" y="-30%" w={520} color={C.tealMid} op={.05} delay={1}/>
+      <div style={{maxWidth:1160,margin:"0 auto",position:"relative",zIndex:1}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",gap:52,marginBottom:72}}>
           <div>
-            <div style="font-weight:800;font-size:18px;color:#fff;">SKelite</div>
-            <div style="font-size:9px;color:var(--teal-light);letter-spacing:1.2px;text-transform:uppercase;">Talent Partners</div>
+            <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:22}}>
+              <div style={{width:46,height:46,borderRadius:14,background:G.teal,display:"flex",alignItems:"center",justifyContent:"center",boxShadow:`0 4px 16px ${C.teal}44`}}>
+                <span style={{color:"#fff",fontWeight:800,fontSize:19}}>SK</span>
+              </div>
+              <div>
+                <div style={{fontWeight:800,fontSize:18,color:"#fff",letterSpacing:-.3}}>SKelite</div>
+                <div style={{fontSize:9,color:C.tealLight,letterSpacing:1.2,textTransform:"uppercase"}}>Talent Partners</div>
+              </div>
+            </div>
+            <p style={{fontSize:14,color:"rgba(255,255,255,.4)",lineHeight:1.75,marginBottom:18}}>Elite Minds, Exceptional Matches.<br/>Fast. Focused. Founder-friendly.</p>
+            <p style={{fontSize:13,color:"rgba(255,255,255,.3)",fontStyle:"italic"}}>Founded by Esha Dubey</p>
+          </div>
+          <div>
+            <h4 style={{fontSize:11,fontWeight:800,color:C.tealMid,textTransform:"uppercase",letterSpacing:1.2,marginBottom:18}}>Services</h4>
+            {["Executive Search","High-Volume Hiring","Employer Branding","Talent Mapping","HR Advisory","Add-On Services"].map(s=>(
+              <div key={s} style={{fontSize:14,color:"rgba(255,255,255,.45)",marginBottom:11}}>{s}</div>
+            ))}
+          </div>
+          <div>
+            <h4 style={{fontSize:11,fontWeight:800,color:C.tealMid,textTransform:"uppercase",letterSpacing:1.2,marginBottom:18}}>Get in Touch</h4>
+            <div style={{fontSize:14,color:"rgba(255,255,255,.45)",marginBottom:11}}>📧 hr@skelite-talent.com</div>
+            <div style={{fontSize:14,color:"rgba(255,255,255,.45)",marginBottom:11}}>📞 +91 8103108993</div>
+            <a href="https://www.linkedin.com/company/skelite-talent-partners/" target="_blank" rel="noreferrer" style={{fontSize:14,color:C.tealLight,display:"block",marginBottom:11,textDecoration:"none"}}>💼 LinkedIn</a>
+          </div>
+          <div>
+            <h4 style={{fontSize:11,fontWeight:800,color:C.tealMid,textTransform:"uppercase",letterSpacing:1.2,marginBottom:18}}>Build Your Team</h4>
+            <p style={{fontSize:14,color:"rgba(255,255,255,.4)",lineHeight:1.7,marginBottom:22}}>Book a free 30-min discovery call. No pressure — just a real conversation about your hiring goals.</p>
+            <button className="btn-yellow" onClick={onForm} style={{width:"100%",justifyContent:"center"}}>Get Free Consultation ✦</button>
           </div>
         </div>
-        <p style="font-size:14px;color:rgba(255,255,255,.4);line-height:1.75;margin-bottom:18px;">Elite Minds, Exceptional Matches.<br/>Fast. Focused. Founder-friendly.</p>
-        <p style="font-size:13px;color:rgba(255,255,255,.3);font-style:italic;">Founded by Esha Dubey</p>
+        <div style={{borderTop:"1px solid rgba(255,255,255,.06)",paddingTop:28,display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:12}}>
+          <div style={{fontSize:12,color:"rgba(255,255,255,.22)"}}>© 2025–26 SKelite Talent Partners. All rights reserved.</div>
+          <div style={{fontSize:12,color:"rgba(255,255,255,.22)"}}>All pricing in INR · GST applicable · 6-month guarantee conditions apply</div>
+        </div>
       </div>
-      <div>
-        <h4 style="font-size:11px;font-weight:800;color:var(--teal-mid);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:18px;">Services</h4>
-        <div style="font-size:14px;color:rgba(255,255,255,.45);margin-bottom:11px;">Executive Search</div>
-        <div style="font-size:14px;color:rgba(255,255,255,.45);margin-bottom:11px;">High-Volume Hiring</div>
-        <div style="font-size:14px;color:rgba(255,255,255,.45);margin-bottom:11px;">Employer Branding</div>
-        <div style="font-size:14px;color:rgba(255,255,255,.45);margin-bottom:11px;">Talent Mapping</div>
-        <div style="font-size:14px;color:rgba(255,255,255,.45);margin-bottom:11px;">HR Advisory</div>
-      </div>
-      <div>
-        <h4 style="font-size:11px;font-weight:800;color:var(--teal-mid);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:18px;">Get in Touch</h4>
-        <div style="font-size:14px;color:rgba(255,255,255,.45);margin-bottom:11px;">📧 hr@skelite-talent.com</div>
-        <div style="font-size:14px;color:rgba(255,255,255,.45);margin-bottom:11px;">📞 +91 8103108993</div>
-        <a href="https://www.linkedin.com/company/skelite-talent-partners/" target="_blank" style="font-size:14px;color:var(--teal-light);display:block;margin-bottom:11px;text-decoration:none;">💼 LinkedIn</a>
-      </div>
-      <div>
-        <h4 style="font-size:11px;font-weight:800;color:var(--teal-mid);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:18px;">Build Your Team</h4>
-        <p style="font-size:14px;color:rgba(255,255,255,.4);line-height:1.7;margin-bottom:22px;">Book a free 30-min discovery call. No pressure — just a real conversation about your hiring goals.</p>
-        <button class="btn-yellow" style="width:100%;justify-content:center;" onclick="openForm()">Get Free Consultation ✦</button>
-      </div>
-    </div>
-    <div style="border-top:1px solid rgba(255,255,255,.06);padding-top:28px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-      <div style="font-size:12px;color:rgba(255,255,255,.22);">© 2025–26 SKelite Talent Partners. All rights reserved.</div>
-      <div style="font-size:12px;color:rgba(255,255,255,.22);">All pricing in INR · GST applicable · 6-month guarantee conditions apply</div>
-    </div>
-  </div>
-</footer>
-
-<!-- AI LEAD FORM MODAL -->
-<div id="modal" class="modal-overlay" style="display:none;">
-  <div class="modal-box">
-    <div style="background:linear-gradient(160deg,#04342C,#0f6e56);border-radius:28px 28px 0 0;padding:28px 32px 24px;position:relative;">
-      <button onclick="closeForm()" style="position:absolute;top:16px;right:18px;background:rgba(255,255,255,.1);border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;color:#fff;font-size:17px;">✕</button>
-      <div class="chip" style="background:rgba(245,197,24,.2);color:var(--yellow);margin-bottom:12px;">Free Consultation</div>
-      <h2 style="font-size:22px;font-weight:800;color:#fff;">Let's Find Your Perfect Hire</h2>
-      <p style="color:rgba(255,255,255,.55);font-size:14px;margin-top:6px;">4 quick questions. 1 personalised recommendation.</p>
-      <div style="display:flex;gap:6px;margin-top:18px;" id="progress-bars">
-        <div class="prog-bar" id="pb0" style="flex:1;background:rgba(255,255,255,.15);"></div>
-        <div class="prog-bar" id="pb1" style="flex:1;background:rgba(255,255,255,.15);"></div>
-        <div class="prog-bar" id="pb2" style="flex:1;background:rgba(255,255,255,.15);"></div>
-        <div class="prog-bar" id="pb3" style="flex:1;background:rgba(255,255,255,.15);"></div>
-      </div>
-    </div>
-    <div style="padding:28px 32px;" id="form-body"></div>
-  </div>
-</div>
-
-<script>
-window.addEventListener('scroll',()=>{
-  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50);
-});
-
-const questions=["What's your company name, and what industry are you in?","How many hires are you looking to make — and at what level (entry, mid, senior, or executive)?","What's your biggest hiring challenge right now?","What's your timeline, and do you have any budget flexibility in mind?"];
-let answers=[],step=0,userName='',userEmail='';
-
-function openForm(){document.getElementById('modal').style.display='flex';step=0;answers=[];renderStep();}
-function closeForm(){document.getElementById('modal').style.display='none';}
-document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeForm();});
-
-function updateProgress(){
-  for(let i=0;i<4;i++){
-    document.getElementById('pb'+i).style.background=answers.length>i?'#F5C518':'rgba(255,255,255,.15)';
-  }
+    </footer>
+  );
 }
 
-function renderStep(){
-  updateProgress();
-  const b=document.getElementById('form-body');
-  if(step===0){
-    let prev=answers.map((a,i)=>`<div style="margin-bottom:14px;"><div style="font-size:11px;font-weight:800;color:#1D9E75;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">${questions[i]}</div><div style="font-size:14px;color:#374151;background:#f0fbf7;border-radius:12px;padding:10px 14px;border:1px solid #e1f5ee;">${a}</div></div>`).join('');
-    b.innerHTML=prev+`<div style="font-size:15px;font-weight:600;color:#085041;margin-bottom:14px;padding:16px 20px;background:#FFFBEA;border-radius:14px;border-left:4px solid #F5C518;">${questions[answers.length]}</div>
-    <textarea id="ans-input" placeholder="Type your answer here..." style="margin-bottom:14px;"></textarea>
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-      <span style="font-size:12px;color:#6b7280;">Question ${answers.length+1} of 4</span>
-      <button onclick="nextAnswer()" style="background:linear-gradient(135deg,#1D9E75,#0f6e56);color:#fff;border:none;border-radius:100px;padding:10px 24px;font-size:14px;font-weight:700;cursor:pointer;">Next →</button>
-    </div>`;
-    document.getElementById('ans-input').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();nextAnswer();}});
-  } else if(step===1){
-    let saved=answers.map(a=>`<div style="font-size:13px;color:#374151;margin-bottom:6px;padding-left:10px;border-left:2.5px solid #9FE1CB;">${a}</div>`).join('');
-    b.innerHTML=`<div style="background:#f0fbf7;border:1px solid #e1f5ee;border-radius:16px;padding:18px;margin-bottom:22px;"><div style="font-size:13px;font-weight:700;color:#1D9E75;margin-bottom:10px;">✓ All answers saved</div>${saved}</div>
-    <p style="font-size:15px;font-weight:700;color:#085041;margin-bottom:16px;">Where should we send your strategy?</p>
-    <input id="inp-name" placeholder="Your full name" style="margin-bottom:10px;"/>
-    <input id="inp-email" type="email" placeholder="Your work email" style="margin-bottom:22px;"/>
-    <button onclick="submitForm()" style="background:#F5C518;color:#085041;border:none;border-radius:100px;padding:15px;font-size:15px;font-weight:800;cursor:pointer;width:100%;">✨ Generate My Recommendation</button>`;
-  } else if(step===2){
-    b.innerHTML=`<div style="text-align:center;padding:48px 0;"><div style="width:44px;height:44px;border:4px solid #e1f5ee;border-top-color:#1D9E75;border-radius:50%;margin:0 auto 18px;animation:spin .8s linear infinite;"></div><p style="color:#6b7280;font-size:14px;">Crafting your personalised strategy...</p></div>`;
-    generateRecommendation();
-  }
+export default function App(){
+  const [showForm,setShowForm]=useState(false);
+  const handleCTA=()=>window.open("tel:+918103108993");
+  return(
+    <>
+      <style>{css}</style>
+      <Nav onCTA={handleCTA}/>
+      <Hero onForm={()=>setShowForm(true)}/>
+      <Stats/>
+      <Services/>
+      <Process/>
+      <Pricing onForm={()=>setShowForm(true)}/>
+      <Testimonials/>
+      <Founder/>
+      <Footer onForm={()=>setShowForm(true)}/>
+      {showForm&&<LeadForm onClose={()=>setShowForm(false)}/>}
+    </>
+  );
 }
-
-function nextAnswer(){
-  const val=document.getElementById('ans-input').value.trim();
-  if(!val)return;
-  answers.push(val);
-  if(answers.length>=4){step=1;}
-  renderStep();
-}
-
-function submitForm(){
-  userName=document.getElementById('inp-name').value.trim();
-  userEmail=document.getElementById('inp-email').value.trim();
-  if(!userName||!userEmail)return;
-  step=2;renderStep();
-}
-
-async function generateRecommendation(){
-  const prompt=`You are a senior talent consultant at SKelite Talent Partners, India's founder-led recruitment firm. Based on this prospect's answers, write a warm, specific 3–4 sentence recommendation. Mention their needs directly, suggest the most relevant SKelite plan, and end with an invitation to book a free discovery call with Esha. Tone: confident, personal, human.\n\nQ: Company & industry? A: ${answers[0]}\nQ: Hires & level? A: ${answers[1]}\nQ: Biggest challenge? A: ${answers[2]}\nQ: Timeline & budget? A: ${answers[3]}\nName: ${userName}\n\nWrite directly, no preamble.`;
-  let result='';
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
-    const data=await res.json();
-    result=data.content?.[0]?.text||'Thank you! Our team will be in touch shortly.';
-  }catch{result=`Thanks ${userName}! Based on what you've shared, SKelite can build a tailored hiring strategy that fits your timeline and budget. Esha will personally review your brief and reach out within 24 hours.`;}
-  document.getElementById('form-body').innerHTML=`<div style="text-align:center;">
-    <div style="font-size:40px;margin-bottom:16px;">🎯</div>
-    <h3 style="font-size:20px;font-weight:800;color:#085041;margin-bottom:18px;">Your Personalised Talent Strategy</h3>
-    <div style="background:#e1f5ee;border:1.5px solid #9FE1CB;border-radius:18px;padding:22px 26px;text-align:left;font-size:15px;color:#374151;line-height:1.8;margin-bottom:22px;">${result}</div>
-    <p style="font-size:13px;color:#6b7280;margin-bottom:22px;">We'll reach out to <strong>${userEmail}</strong> within 24 hours.</p>
-    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-      <a href="tel:+918103108993" class="btn-teal" style="text-decoration:none;">📞 Call Esha Now</a>
-      <a href="https://www.linkedin.com/company/skelite-talent-partners/" target="_blank" class="btn-ghost" style="text-decoration:none;">💼 LinkedIn</a>
-    </div>
-  </div>`;
-}
-</script>
-</body>
-</html>
