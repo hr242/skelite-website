@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Share Your Experience — SKelite Talent Partners</title>
+<meta name="robots" content="noindex"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --teal:#1D9E75;--td:#0f6e56;--tdd:#085041;--tdp:#04342C;
+  --y:#F5C518;--yd:#d4a10e;--tp:#e8f5f1;--tg:#f4faf8;
+  --gray:#5a7a72;font-family:'Plus Jakarta Sans',sans-serif;
+}
+body{background:var(--tg);min-height:100vh;display:flex;flex-direction:column;}
+/* NAV */
+nav{background:#fff;border-bottom:1px solid #e8f0ec;padding:0 5vw;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.nav-logo img{height:36px;width:auto;}
+.nav-back{font-size:13px;font-weight:700;color:var(--td);text-decoration:none;display:flex;align-items:center;gap:6px;}
+.nav-back:hover{color:var(--teal);}
+/* MAIN */
+main{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:48px 5vw 80px;}
+.form-wrap{background:#fff;border-radius:24px;box-shadow:0 4px 40px rgba(4,52,44,.08);padding:48px 48px 52px;max-width:640px;width:100%;}
+/* HEADING */
+.form-heading{font-size:clamp(26px,5vw,36px);font-weight:800;color:var(--tdp);letter-spacing:-0.8px;margin-bottom:10px;line-height:1.15;}
+.form-intro{font-size:15px;color:var(--gray);line-height:1.7;margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid #eaf3ef;}
+/* FORM FIELDS */
+.field-group{margin-bottom:22px;}
+label{display:block;font-size:13px;font-weight:700;color:var(--tdp);margin-bottom:7px;letter-spacing:.2px;}
+label span.req{color:var(--teal);margin-left:2px;}
+textarea,input[type="text"]{
+  width:100%;border:1.5px solid #d4e8e0;border-radius:12px;
+  font-family:inherit;font-size:14px;color:var(--tdp);
+  padding:13px 16px;background:#fff;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+  resize:vertical;
+}
+textarea{min-height:130px;}
+textarea:focus,input[type="text"]:focus{
+  border-color:var(--teal);
+  box-shadow:0 0 0 3px rgba(29,158,117,.1);
+}
+.helper{font-size:12px;color:#8aaa9e;margin-top:6px;line-height:1.6;}
+/* STAR RATING */
+.star-row{display:flex;gap:8px;align-items:center;flex-direction:row-reverse;justify-content:flex-end;}
+.star-row input[type="radio"]{display:none;}
+.star-row label{
+  font-size:32px;cursor:pointer;color:#d4e8e0;
+  transition:color .15s,transform .1s;
+  margin:0;letter-spacing:0;font-weight:400;
+}
+.star-row input[type="radio"]:checked ~ label,
+.star-row label:hover,
+.star-row label:hover ~ label{color:var(--y);}
+.star-row label:active{transform:scale(.88);}
+.star-label{font-size:13px;font-weight:700;color:var(--tdp);margin-bottom:8px;letter-spacing:.2px;}
+.star-label span.req{color:var(--teal);margin-left:2px;}
+/* SUBMIT */
+.btn-submit{
+  width:100%;background:linear-gradient(135deg,var(--teal),var(--td));
+  color:#fff;border:none;border-radius:14px;padding:16px 24px;
+  font-family:inherit;font-size:16px;font-weight:800;cursor:pointer;
+  letter-spacing:.2px;transition:opacity .2s,transform .1s;
+  margin-top:8px;
+}
+.btn-submit:hover{opacity:.9;}
+.btn-submit:active{transform:scale(.98);}
+.btn-submit:disabled{opacity:.55;cursor:not-allowed;}
+/* THANK YOU */
+#thank-you{display:none;text-align:center;padding:48px 24px;}
+.ty-icon{font-size:48px;margin-bottom:16px;}
+.ty-msg{font-size:22px;font-weight:800;color:var(--tdp);margin-bottom:10px;}
+.ty-sub{font-size:14px;color:var(--gray);line-height:1.7;}
+/* FOOTER */
+footer{background:var(--tdp);color:rgba(255,255,255,.5);text-align:center;font-size:12px;padding:18px 5vw;}
+footer a{color:rgba(255,255,255,.6);text-decoration:none;}
+/* MOBILE */
+@media(max-width:600px){
+  .form-wrap{padding:28px 22px 36px;border-radius:18px;}
+  .form-heading{font-size:24px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="https://i.postimg.cc/LsXPNJD8/SKelite-website-logo.png" alt="SKelite Talent Partners"/>
+  </a>
+  <a href="/" class="nav-back">← Back to website</a>
+</nav>
+
+<main>
+  <div class="form-wrap">
+
+    <!-- FORM STATE -->
+    <div id="form-state">
+      <h1 class="form-heading">Share your experience</h1>
+      <p class="form-intro">Thank you for taking the time. What you write here may be featured on our website, on LinkedIn, and in our proposals.</p>
+
+      <form id="feedback-form" action="https://formspree.io/f/mkjoaynq" method="POST">
+        <!-- Hidden field to identify source -->
+        <input type="hidden" name="_subject" value="New client feedback - SKelite"/>
+      <input type="hidden" name="form_type" value="Feedback"/>
+      <input type="text" name="_gotcha" style="display:none"/>
+        <input type="hidden" name="_replyto" value="hr@skelite-talent.com"/>
+
+        <!-- Field 1: Your feedback -->
+        <div class="field-group">
+          <label for="feedback">Your feedback<span class="req">*</span></label>
+          <textarea id="feedback" name="feedback" required placeholder="Write your feedback here..."></textarea>
+          <p class="helper">A short paragraph is perfect. How the hiring went, the role we worked on for you, how the coordination was, and how we took care of the process end to end. Whatever feels right to you.</p>
+        </div>
+
+        <!-- Field 2: Star rating -->
+        <div class="field-group">
+          <div class="star-label">How many stars would you give us?<span class="req">*</span></div>
+          <div class="star-row">
+            <input type="radio" name="rating" id="s5" value="5" required/>
+            <label for="s5" title="5 stars">★</label>
+            <input type="radio" name="rating" id="s4" value="4"/>
+            <label for="s4" title="4 stars">★</label>
+            <input type="radio" name="rating" id="s3" value="3"/>
+            <label for="s3" title="3 stars">★</label>
+            <input type="radio" name="rating" id="s2" value="2"/>
+            <label for="s2" title="2 stars">★</label>
+            <input type="radio" name="rating" id="s1" value="1"/>
+            <label for="s1" title="1 star">★</label>
+          </div>
+        </div>
+
+        <!-- Field 3: Name -->
+        <div class="field-group">
+          <label for="name">Your name<span class="req">*</span></label>
+          <input type="text" id="name" name="name" required placeholder="e.g. Priya Sharma"/>
+        </div>
+
+        <!-- Field 4: Designation and company -->
+        <div class="field-group">
+          <label for="designation">Designation and company<span class="req">*</span></label>
+          <input type="text" id="designation" name="designation" required placeholder="e.g. Head of HR, Acme Pvt Ltd"/>
+        </div>
+
+        <!-- Field 5: Industry -->
+        <div class="field-group">
+          <label for="industry">Industry<span class="req">*</span></label>
+          <input type="text" id="industry" name="industry" required placeholder="e.g. Fintech, Manufacturing, Retail"/>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submit-btn">Submit →</button>
+      </form>
+    </div>
+
+    <!-- THANK YOU STATE -->
+    <div id="thank-you">
+      <div class="ty-icon">💚</div>
+      <div class="ty-msg">Thank you so much.</div>
+      <p class="ty-sub">This genuinely means a lot to us.</p>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 SKelite Talent Partners · <a href="mailto:hr@skelite-talent.com">hr@skelite-talent.com</a></p>
+</footer>
+
+<script>
+document.getElementById('feedback-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+  const data = new FormData(this);
+  try {
+    const res = await fetch(this.action, {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      document.getElementById('form-state').style.display = 'none';
+      document.getElementById('thank-you').style.display = 'block';
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Submit →';
+      alert('Something went wrong. Please try again or email us at hr@skelite-talent.com');
+    }
+  } catch(err) {
+    btn.disabled = false;
+    btn.textContent = 'Submit →';
+    alert('Connection error. Please try again or email us at hr@skelite-talent.com');
+  }
+});
+</script>
+</body>
+</html>
