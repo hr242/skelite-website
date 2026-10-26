@@ -21,12 +21,22 @@
     leave:    'https://rzp.io/rzp/skelite-leave-and-attendance-p',
     ops:      'https://rzp.io/rzp/skelite-hr-operations-pack',
     bgv:      'https://rzp.io/rzp/skelite-bgv-pack',
-    hrbp:     'https://rzp.io/rzp/skelite-hrbp-pack'
+    hrbp:     'https://rzp.io/rzp/skelite-hrbp-pack',
+    /* Created and tested 25 Oct 2026. Both pages loaded as a buyer would see
+       them and both showed Pay 599.00 before these URLs were written here. */
+    letters:  'https://rzp.io/rzp/skelite-hr-letters-library',
+    jd:       'https://rzp.io/rzp/skelite-job-descriptions',
+    anl:      'https://rzp.io/rzp/skelite-hr-analytics-pack',
+    /* Created and tested 26 Oct 2026. Each page was opened as a buyer would
+       see it and showed Pay 599.00 before its URL was written here. */
+    esop:     'https://rzp.io/rzp/skelite-esop-basics-pack',
+    agr:      'https://rzp.io/rzp/skelite-agreements-pack',
+    comm:     'https://rzp.io/rzp/skelite-corporate-comms-pack'
   };
 
   var BUNDLES = [
     { best: true, title: 'Complete HR Toolkit', price: '₹2,999',
-      desc: 'All 10 packs. 161 editable Word and Excel files. Everything below, together. Worth ₹5,990 if bought pack by pack.',
+      desc: 'All 16 packs. 222 editable Word and Excel files. Everything below, together. Worth ₹9,584 if bought pack by pack.',
       btn: 'Buy Now · ₹2,999', url: RZP.complete },
     { best: false, title: 'Starter Kit', price: '₹1,499',
       desc: 'Talent Acquisition, Onboarding, and Compliance &amp; Policy. Hire, onboard and stay compliant through your first 50 people. Worth ₹1,797 separately.',
@@ -54,7 +64,19 @@
     { n:'BGV Pack', f:7, url:RZP.bgv, prev:'/previews/bgv-pack.pdf',
       d:'Background verification policy, a DPDP-compliant candidate consent form, verification checklists, adverse findings process, and a vendor agreement with a data processing schedule.' },
     { n:'HRBP Pack', f:11, url:RZP.hrbp, prev:'/previews/hrbp-pack.pdf',
-      d:'HRBP operating model and charter, organisation design guide, workforce plan and headcount model, span of control analyser, and a restructuring playbook.' }
+      d:'HRBP operating model and charter, organisation design guide, workforce plan and headcount model, span of control analyser, and a restructuring playbook.' },
+    { n:'HR Letters Library', f:12, url:RZP.letters, prev:'/previews/hr-letters-library.pdf',
+      d:'Every letter you hope never to send. Warning letters, show cause notice, charge sheet, suspension and the full domestic enquiry kit, absence and abandonment sequence, confirmation, transfer, relieving and experience letters, termination and retrenchment, plus a register that records proof of service.' },
+    { n:'Job Descriptions Library', f:13, url:RZP.jd, prev:'/previews/job-descriptions-library.pdf',
+      d:'50 job descriptions across 8 functions, from inside sales executive to CXO, written for Indian SMEs and startups rather than copied from a multinational careers page. Includes a JD writing guide and a salary benchmarking workbook you fill from your own closed offers.' },
+    { n:'HR Analytics Pack', f:11, url:RZP.anl, prev:'/previews/hr-analytics-pack.pdf',
+      d:'Six working dashboards: hiring, attrition, headcount and diversity, engagement, people cost, and a one page scorecard for your founder. Attrition is cut by tenure, department and manager with a regretted split, because the headline figure tells you almost nothing. Includes a cost of attrition model that puts a rupee figure on losing one person.' },
+    { n:'ESOP Basics Pack', f:6, url:RZP.esop, prev:'/previews/esop-basics-pack.pdf',
+      d:'What ESOPs are, what the Companies Act actually requires, and what they cost your employee in tax. Scheme document, grant letter and a plain English explainer to send with it. The tracker flags any grant that breaks the one year vesting rule, and works out which tax deferral window applies from the allotment date. Written against s.62(1)(b) and Rule 12 as they stand in 2026.' },
+    { n:'Agreements Pack', f:9, url:RZP.agr, prev:'/previews/agreements-pack.pdf',
+      d:'NDAs, consultant agreement, internship agreement, confidentiality and IP assignment, fixed term employment, and a register that flags what was never signed back. There is no post-employment non-compete anywhere in this pack, because section 27 of the Indian Contract Act makes one void however carefully it is drafted. You get the three restraints that actually work instead, plus the contractor misclassification test that is the most expensive mistake in this area.' },
+    { n:'Corporate Communication Pack', f:10, url:RZP.comm, prev:'/previews/corporate-communication-pack.pdf',
+      d:'The communication handbook you publish to your company, plus writing, email and meeting standards, and ready templates for the announcements every company ends up making. Includes a change playbook and a sensitive communication file covering what you may and may not say during a POSH matter, a retrenchment or an investigation. No invented statistics anywhere in it.' }
   ];
 
   var STRIP = [
@@ -87,7 +109,9 @@
         (PREVIEWS_READY
           ? '<a class="tk-preview" href="' + p.prev + '" target="_blank" rel="noopener">Preview</a>'
           : '<span class="tk-preview-soon">Preview coming soon</span>') +
-        '<a class="tk-buy" href="' + p.url + '" target="_blank" rel="noopener">Buy Now · ₹599</a>' +
+        (p.url
+          ? '<a class="tk-buy" href="' + p.url + '" target="_blank" rel="noopener">Buy Now · ₹599</a>'
+          : '<span class="tk-buy-soon">Buy Now opens shortly</span>') +
       '</div>' +
     '</div>';
   }
@@ -99,7 +123,7 @@
     h += '<div class="tk-head">';
     h += '<div class="tk-eyebrow">HR TOOLKIT · BUY ONLINE</div>';
     h += '<' + (opts.h1 ? 'h1' : 'h2') + ' class="tk-headline">The HR systems we build for clients. Ready to use today.</' + (opts.h1 ? 'h1' : 'h2') + '>';
-    h += '<p class="tk-sub">161 editable Word and Excel files, written against the Labour Codes as they stand in 2026. Every template carries a filled Indian example. No call required. From ₹599.</p>';
+    h += '<p class="tk-sub">222 editable Word and Excel files, written against the Labour Codes as they stand in 2026. Every template carries a filled Indian example. No call required. From ₹599.</p>';
     h += '</div>';
 
     h += '<div class="tk-strip">';

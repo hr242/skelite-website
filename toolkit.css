@@ -37,6 +37,7 @@
 .tk-buy{display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--teal),var(--td));color:#fff;border:none;border-radius:100px;padding:10px 20px;font-size:13px;font-weight:800;text-decoration:none;cursor:pointer;transition:transform .2s,box-shadow .2s;white-space:nowrap;}
 .tk-buy:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(29,158,117,.3);}
 .tk-buy-lg{width:100%;padding:14px 24px;font-size:15px;}
+.tk-buy-soon{display:inline-flex;align-items:center;justify-content:center;background:var(--l,#EBF2F2);color:var(--gray);border:1px dashed #BFD2D2;border-radius:100px;padding:10px 20px;font-size:12.5px;font-weight:700;white-space:nowrap;}
 .tk-bundle-best .tk-buy-lg{background:var(--y);color:var(--tdp);}
 .tk-bundle-best .tk-buy-lg:hover{background:var(--yd);box-shadow:0 10px 24px rgba(245,197,24,.36);}
 
