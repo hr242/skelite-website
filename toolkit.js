@@ -36,7 +36,7 @@
 
   var BUNDLES = [
     { best: true, title: 'Complete HR Toolkit', price: '₹2,999',
-      desc: 'All 16 packs. 222 editable Word and Excel files. Everything below, together. Worth ₹9,584 if bought pack by pack.',
+      desc: 'All 16 packs. 223 editable Word and Excel files. Everything below, together. Worth ₹9,584 if bought pack by pack.',
       btn: 'Buy Now · ₹2,999', url: RZP.complete },
     { best: false, title: 'Starter Kit', price: '₹1,499',
       desc: 'Talent Acquisition, Onboarding, and Compliance &amp; Policy. Hire, onboard and stay compliant through your first 50 people. Worth ₹1,797 separately.',
@@ -52,7 +52,7 @@
       d:'Goal sheets, a competency framework with rating scales, self and manager review forms, 360 feedback, calibration guidance, performance improvement plans, and increment and promotion letters.' },
     { n:'Engagement Pack', f:11, url:RZP.eng, prev:'/engagement-pack.pdf',
       d:'Full engagement survey and pulse survey kits, stay interview guide, rewards and recognition policy, wellness policy, and a survey analysis dashboard that scores itself.' },
-    { n:'Compliance &amp; Policy Pack', f:35, url:RZP.comp, prev:'/compliance-and-policy-pack.pdf',
+    { n:'Compliance &amp; Policy Pack', f:36, url:RZP.comp, prev:'/compliance-and-policy-pack.pdf',
       d:'The employee handbook and more than twenty policies. POSH policy with the Internal Committee constitution pack, code of conduct, grievance, disciplinary, whistleblower, data privacy, plus a compliance calendar and a threshold tracker that tells you which laws apply at your headcount.',
       note:'Includes the POSH policy, complaint process and Internal Committee constitution pack to set up yourself. Want us to constitute the committee and train your team? That is the <a href="/#hr-advisory" class="tk-inline-link">POSH Compliance Setup</a> above.' },
     { n:'Payroll &amp; Compensation Pack', f:15, url:RZP.pay, prev:'/payroll-and-compensation-pack.pdf',
@@ -123,7 +123,7 @@
     h += '<div class="tk-head">';
     h += '<div class="tk-eyebrow">HR TOOLKIT · BUY ONLINE</div>';
     h += '<' + (opts.h1 ? 'h1' : 'h2') + ' class="tk-headline">The HR systems we build for clients. Ready to use today.</' + (opts.h1 ? 'h1' : 'h2') + '>';
-    h += '<p class="tk-sub">222 editable Word and Excel files, written against the Labour Codes as they stand in 2026. Every template carries a filled Indian example. No call required. From ₹599.</p>';
+    h += '<p class="tk-sub">223 editable Word and Excel files, written against the Labour Codes as they stand in 2026. Every template carries a filled Indian example. No call required. From ₹599.</p>';
     h += '</div>';
 
     h += '<div class="tk-strip">';
